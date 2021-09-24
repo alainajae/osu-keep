@@ -31,19 +31,6 @@ h1.title{
     padding: 0px;
 }
 
-h6 {
-    position:absolute;
-    bottom:0;
-    right:0;
-}
-
-a:link, a:visited{
-    color:pink;
-}
-
-a.hidden:link, a.hidden:visited{
-    color: navy;
-}
 
 .topnav {
     background-color: #333;
