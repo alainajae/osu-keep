@@ -38,14 +38,14 @@ def get_scores():
 
    params = {
       'mode': 'osu',
-      'limit': 1
+      'limit': 1 
    }
 
    response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=headers)
 
-   user_scores = response.json()[0]
+   user_scores = response.json()
 
-   return flask.Response(user_scores, mimetype='text/html')
+   return flask.Response(f'{user_scores}', mimetype='text/html') # cast json to string with default python formatting then pass to Response
 
 
 if __name__ == '__main__':
