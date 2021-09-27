@@ -12,19 +12,20 @@
             <a href="aboutus.html">About Us</a>
             <a href="login.html">Login</a>
         </div> 
-
+        
         <h1 class = "title">osu!keep</h1>
 
-        <form method="get" action="/getscores">
+        <div class="get_id">
+        <form id="get_id" method="get" action="/getscores">
             <div>
-                Enter a number here: <input type="number" name="user_id_field">
+                Enter User ID: <input type="number" name="user_id_field" min="0">
             </div>
             <div>
                 <input type="submit" value="osu! User ID">
             </div>
         </form>
 
-        <div class="bg"></div>
+        </div>
         
     </body>
 </html>
