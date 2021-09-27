@@ -1,6 +1,5 @@
     body  
-    {  
-        
+    {          
         box-sizing: border-box; /*Not necessary in this situation*/
         display: block; /*Not necessary, but we do want it this way*/
         width: 100vw;  /*Not necessary, but we do want it this way*/
@@ -10,7 +9,8 @@
         background: url('osubackground.jpg') no-repeat center center;  
         /* Shorthand: image, repeat, X align, Y align. */
         background-size: cover; /* Cover all available space*/
-       
+        overflow-y: hidden;
+        overflow-x: hidden;
         font-family: 'Shadows Into Light', cursive;
          
     }  

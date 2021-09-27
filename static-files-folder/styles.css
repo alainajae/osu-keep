@@ -38,44 +38,42 @@ h1.title{
     position: fixed;
     top: 0;
     right: 0;
-  }
+}
   
-  /* Style the links inside the navigation bar */
-  .topnav a {
+/* Style the links inside the navigation bar */
+.topnav a {
     float: left;
     color: #f2f2f2;
     text-align: center;
     padding: 8px 26px;
     text-decoration: none;
     font-size: 17px;
-  }
+}
   
   /* Change the color of links on hover */
-  .topnav a:hover {
+.topnav a:hover {
     background-color: #ddd;
     color: black;
-  }
+}
   
-  /* Add a color to the active/current link */
-  .topnav a.active {
+/* Add a color to the active/current link */
+.topnav a.active {
     background-color: pink;
     color: white;
-  }
+}
 
-  .bg {
-      box-sizing: border-box; /*Not necessary in this situation*/
+.bg {
+    box-sizing: border-box; /*Not necessary in this situation*/
     display: block; /*Not necessary, but we do want it this way*/
-  width: 100vw;  /*Not necessary, but we do want it this way*/
-  height: 100vh; /*Necessary.  100vh = 100% of the viewport height*/
-  padding: 0; /* No padding */
-  margin: 0; /* No margins */
-  background: url('osubackground.jpg') no-repeat center center;  
-  /* Shorthand: image, repeat, X align, Y align. */
-  background-size: cover; /* Cover all available space*/
-  }
+    width: 100vw;  /*Not necessary, but we do want it this way*/
+    height: 100vh; /*Necessary.  100vh = 100% of the viewport height*/
+    padding: 0; /* No padding */
+    margin: 0; /* No margins */
+    background: url('osubackground.jpg') no-repeat center center;  
+    /* Shorthand: image, repeat, X align, Y align. */
+    background-size: cover; /* Cover all available space*/
+}
 
 html{
     font-family: 'Shadows Into Light', cursive;
-    
-
 }
