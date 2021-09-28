@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
 body, html{
     margin: 0;
     padding: 0;
@@ -92,5 +94,5 @@ input[type=number]{
 }
 
 html{
-    font-family: 'Shadows Into Light', cursive;
+    font-family: 'Rubik', sans-serif;
 }
