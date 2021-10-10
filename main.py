@@ -1,6 +1,11 @@
 import flask
 import requests
-from os import getenv
+
+# import environment variables from .env
+import dotenv
+dotenv.load_dotenv()
+
+import os
 
 app = flask.Flask(__name__)
 
@@ -14,8 +19,8 @@ def root():
 def get_token():
    data = {
       # TODO: use getenv() for id and secret later which needs to be set up in gcloud
-      'client_id': 10026,
-      'client_secret': 'EuPXSua2lkqyGuMKsnUJTSQYG2CLJhrTMoIcaA3z',
+      'client_id': os.getenv("OSU-CLIENT-ID"),
+      'client_secret': os.getenv("OSU-CLIENT-SECRET"),
       'grant_type': 'client_credentials',
       'scope': 'public'
    }
