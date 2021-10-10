@@ -18,7 +18,6 @@ def root():
 
 def get_token():
    data = {
-      # TODO: use getenv() for id and secret later which needs to be set up in gcloud
       'client_id': os.getenv("OSU-CLIENT-ID"),
       'client_secret': os.getenv("OSU-CLIENT-SECRET"),
       'grant_type': 'client_credentials',
