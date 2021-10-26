@@ -28,29 +28,39 @@ def get_token():
 
    return response.json().get('access_token')
 
+TOKEN = get_token()
+HEADERS = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': f'Bearer {TOKEN}'
+} 
+
+def get_user(user_key):
+    """
+    Returns a User object which extends UserCompact from a user key which can be a username or user ID
+    """
+    params = {
+        'key': {user_key}
+    }
+    
+    response = requests.get(f'{API_URL}/users/{user_key}', params=params, headers=HEADERS)
+    return response.json()    
+
 @app.route('/getscores')
 def get_scores():
-   user_id = flask.request.args['user_id_field']
+    user_key = flask.request.args['user_key_field']
+    user = get_user(user_key)
+    user_id = user['id']
 
-   token = get_token()
+    params = {
+        'include_fails': 1,
+        'limit': 1
+    }
 
-   headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': f'Bearer {token}'
-   }
+    response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
+    user_scores = response.json()
 
-   params = {
-      'mode': 'osu',
-      'limit': 1 
-   }
-
-   response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=headers)
-
-   user_scores = response.json()
-
-   return flask.Response(f'{user_scores}', mimetype='text/html') # cast json to string with default python formatting then pass to Response
-
+    return flask.Response(f'{user_scores}', mimetype='text/html') # cast json to string with default python formatting then pass to Response
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
