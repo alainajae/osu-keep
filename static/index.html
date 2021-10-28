@@ -15,17 +15,11 @@
         
         <h1 class = "title">osu!keep</h1>
 
-        <div class="get_id">
-        <form id="get_id" method="get" action="/getscores">
-            <div>
-                <input type="text" name="user_key_field" placeholder="Username or User ID" min="0">
-            </div>
-            <div>
-                <input type="submit" value="Submit">
-            </div>
-        </form>
-
+        <div class="get_user">
+            <form method="get" action="/getscores">
+                <input class="user_input" type="text" name="user_key_field" placeholder="Username or User ID" min="0">
+                <input class="submit" type="submit" value="Go">
+            </form>
         </div>
-        
     </body>
 </html>

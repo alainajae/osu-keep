@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 
+:root {
+    --osu-pink: #FF66AA;
+}
+
 body  
 {          
     box-sizing: border-box; /*Not necessary in this situation*/
@@ -22,7 +26,7 @@ body
     margin: auto;  
     margin: 20 0 0 450px;  
     padding: 80px;  
-    background: pink;  
+    background: var(--osu-pink);  
     border-radius: 15px ;  
             
 }  
@@ -71,26 +75,26 @@ span{
     position: fixed;
     top: 0;
     right: 0;
-    }
+}
     
-    /* Style the links inside the navigation bar */
-    .topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 8px 26px;
-    text-decoration: none;
-    font-size: 17px;
-    }
-    
-    /* Change the color of links on hover */
-    .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-    }
-    
-    /* Add a color to the active/current link */
-    .topnav a.active {
-    background-color: pink;
-    color: white;
-    }
+/* Style the links inside the navigation bar */
+.topnav a {
+float: left;
+color: #f2f2f2;
+text-align: center;
+padding: 8px 26px;
+text-decoration: none;
+font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+background-color: #ddd;
+color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+background-color: var(--osu-pink);
+color: white;
+}
