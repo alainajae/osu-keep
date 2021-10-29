@@ -13,8 +13,17 @@ API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 
 @app.route('/')
+@app.route('/index.html')
 def root():
-   return flask.redirect("/static/index.html", code=302)
+   return flask.render_template('index.html')
+
+@app.route('/aboutus.html')
+def about_page():
+   return flask.render_template('aboutus.html')
+
+@app.route('/login.html')
+def login_page():
+   return flask.render_template('login.html')
 
 def get_token():
    data = {

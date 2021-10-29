@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 
+:root {
+    --osuPink: #FF66AA;
+    --inputSpacing: 0.5rem;
+    --transitionDuration: 100ms;
+    --myGrey: #333;
+    --radius: 1rem;
+}
+
 body, html{
     margin: 0;
     padding: 0;
@@ -16,10 +24,8 @@ body{
     height: 100vh;
     background-image: url("osubackground.jpg");
     background-size: cover;
-    background-repeat:   no-repeat;
-    background-position: center center;
-     
-    
+    background-repeat: no-repeat;
+    background-position: center center; 
 }
 
 h1.title{
@@ -31,17 +37,36 @@ h1.title{
     font-weight: bold;
 }
 
-.box {
-    position: fixed;
-    right: 10px; bottom: 0px;
-    width: 200px;
-    height:40px;
-    padding: 0px;
+.user_input {
+    outline: none;
+    border: 2px solid white;
+    border-radius: var(--radius);
+    padding: var(--inputSpacing);
+    margin: var(--inputSpacing);
+    width: 50%;
+    transition: var(--transitionDuration);
 }
 
+.user_input:focus {
+    border: 2px solid var(--myGrey);
+}
+
+.submit {
+    outline: none;
+    border: 2px solid white;
+    border-radius: var(--radius);
+    padding: var(--inputSpacing);
+
+}
+.submit:hover {
+    border: 2px solid grey;
+}
+.submit:active {
+    border: 2px solid black;
+}
 
 .topnav {
-    background-color: #333;
+    background-color: var(--myGrey);
     overflow: hidden;
     position: fixed;
     top: 0;
@@ -66,18 +91,17 @@ h1.title{
   
 /* Add a color to the active/current link */
 .topnav a.active {
-    background-color: pink;
+    background-color: var(--osuPink);
     color: white;
 }
 
-.get_id{
-    width: 360px;  
-        overflow: hidden;  
-        margin: auto;  
-        margin: 20 0 0 450px;  
-        padding: 80px;  
-        background: pink;  
-        border-radius: 15px ;  
+.get_user{
+    width: 20rem;  
+    overflow: hidden;  
+    margin: auto;
+    padding: 3rem;
+    background: var(--osuPink);  
+    border-radius: var(--radius);  
 }
 
 input::-webkit-outer-spin-button,
@@ -85,7 +109,7 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-input[type=number]{
+input[type=text]{
     -moz-appearance: textfield;
 }
 
