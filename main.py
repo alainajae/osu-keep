@@ -1,5 +1,6 @@
 import flask
 import requests
+import comment
 
 # import environment variables from .env
 import dotenv
@@ -11,6 +12,8 @@ app = flask.Flask(__name__)
 
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
+
+cm = comment.ChatManager()
 
 @app.route('/')
 @app.route('/index.html')
@@ -55,6 +58,12 @@ def get_user(user_key):
     response = requests.get(f'{API_URL}/users/{user_key}', params=params, headers=HEADERS)
     return response.json()    
 
+def display():
+    cmt_list = cm.get_cmts()
+    
+    return flask.render_template('profile.html', comments=cmt_list)
+    
+
 @app.route('/getscores')
 def get_scores():
     user_key = flask.request.args['user_key_field']
@@ -68,8 +77,14 @@ def get_scores():
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
     user_scores = response.json()
+    flask.Response(f'{user_scores}', mimetype='text/html')
+    return  display()
 
-    return flask.Response(f'{user_scores}', mimetype='text/html') # cast json to string with default python formatting then pass to Response
+@app.route('/create-comment', methods=['POST', 'GET'])
+def handle_request_add_coment():
+    text = flask.request.values['text']
+    cm.create_cmt('user', text)
+    return display()
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
