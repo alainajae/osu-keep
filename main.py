@@ -75,7 +75,7 @@ def get_scores():
         'limit': 1
     }
 
-    response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
+    response = requests.get(f'{API_URL}/users/{user_id}/scores/recent', params=params, headers=HEADERS)
     user_scores = response.json()
     flask.Response(f'{user_scores}', mimetype='text/html')
     return  display()
