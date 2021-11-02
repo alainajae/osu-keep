@@ -17,6 +17,31 @@
         </tbody>
     </table>
 </div>
+
+<div class="center">
+    <table cellspacing="5">
+    {% for cmt in comments %}
+       <tr>
+            <td class="comment"> <span style="color: #585858;">>{{ cmt['user'] }}:</span><br>{{ cmt['text'] }}</td>
+        </tr>
+    {% else %}
+        <td><td>There are no comments yet.</td></tr>
+    {% endfor %}
+    </table>
+
+
+<div class="commentForm">
+    <h2>Add a comment</h2>
+    <form method="post" action="/create-comment">
+        <table>
+            <tr>
+                <td><input class="user_input" type="text" name="text"></td>
+                <td><input class = "submit" type="submit" value="Send"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
 {% endblock %}
 {% block script %}
 <script>
