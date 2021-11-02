@@ -68,7 +68,7 @@ def get_scores():
 
     params = {
         'include_fails': 1,
-        'limit': 5
+        'limit': 100
     }
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
