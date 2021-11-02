@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <table id="score-table">
+        <tr>
+            <td>test</td>
+            <td>test2</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    window.addEventListener('load', function() {
+        var encodedScores = '{{scores}}'
+        var parser = new DOMParser;
+        var dom = parser.parseFromString('<!doctype html><body>' + encodedScores, 'text/html');
+        var scores = JSON.parse(dom.body.textContent);
+
+        console.log(typeof(scores));
+        console.log(scores);
+    });
+</script>
+{% endblock %}

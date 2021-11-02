@@ -1,5 +1,7 @@
 import flask
 import requests
+import json
+import pprint
 
 # import environment variables from .env
 import dotenv
@@ -55,21 +57,25 @@ def get_user(user_key):
     response = requests.get(f'{API_URL}/users/{user_key}', params=params, headers=HEADERS)
     return response.json()    
 
-@app.route('/getscores')
+# @app.route('/request-scores')
+# def request_scores():
+#     return flask.render_template('profile.html')
+
+@app.route('/get-scores')
 def get_scores():
-    user_key = flask.request.args['user_key_field']
-    user = get_user(user_key)
+    user = get_user(flask.request.args['user_key_field'])
     user_id = user['id']
 
     params = {
         'include_fails': 1,
-        'limit': 1
+        'limit': 5
     }
 
-    response = requests.get(f'{API_URL}/users/{user_id}/scores/recent', params=params, headers=HEADERS)
+    response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
     user_scores = response.json()
+    scores_json = json.dumps(user_scores)
 
-    return flask.Response(f'{user_scores}', mimetype='text/html') # cast json to string with default python formatting then pass to Response
+    return flask.render_template('profile.html', scores=scores_json)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
