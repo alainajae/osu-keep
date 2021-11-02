@@ -2,14 +2,10 @@
 <html lang = "en">
     <head>
         <title>osu!keep</title>
-        <link rel="stylesheet" href="../static/styles.css">
-        <link rel="stylesheet" href="../static/loading_screen.css">
+        {% block link %}
+        {% endblock %}
     </head>
     <body>
-
-        <div id="loading-screen">
-            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-        </div>
 
         <div class="topnav">
             <!-- class="active" is the attribute that makes the nav pink, maybe use javascript to fix it -->
@@ -23,6 +19,7 @@
 
     </body>
 
-    <script src="../static/script.js"></script>
+    {% block script %}
+    {% endblock %}
 
 </html>
