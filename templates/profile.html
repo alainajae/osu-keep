@@ -3,8 +3,12 @@
 <div>
     <table id="score-table">
         <tr>
-            <td>test</td>
-            <td>test2</td>
+            <td>#</td>
+            <td>Rank</td>
+            <td>Beatmap</td>
+            <td>Acc</td>
+            <td>Combo</td>
+            <td>PP</td>
         </tr>
     </table>
 </div>
@@ -12,10 +16,32 @@
 {% block script %}
 <script>
     window.addEventListener('load', function() {
-        var encodedScores = '{{scores}}'
+        var encodedScores = '{{scores}}';
         var parser = new DOMParser;
         var dom = parser.parseFromString('<!doctype html><body>' + encodedScores, 'text/html');
         var scores = JSON.parse(dom.body.textContent);
+
+        const scoreTable = document.getElementById('score-table');
+
+        for (let i = 0; i < Object.keys(scores).length; i++) {
+            const beatmapSet = scores[i]['beatmapset']
+            const diffName = scores[i]['beatmap']['version']
+            //Format: ARTIST - TITLE [DIFFNAME] // MAPPER
+            const beatmapTitle = `${beatmapSet['artist']} - ${beatmapSet['title']} [${diffName}] // ${beatmapSet['creator']}`
+            const acc = Math.round(10000 * scores[i]['accuracy']) / 100; 
+
+            scoreTable.innerHTML += 
+            `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${scores[i]['rank']}</td>
+                <td>${beatmapTitle}</td>
+                <td>${acc}%</td>
+                <td>${scores[i]['max_combo']}</td>
+                <td>${scores[i]['pp']}</td>
+            </tr>
+            `
+        }
 
         console.log(typeof(scores));
         console.log(scores);
