@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<h1>{{user}}'s Profile</h1>
+
 <div>
     <table>
         <thead>
@@ -19,28 +22,27 @@
 </div>
 
 <div class="center">
+    <div class="commentForm">
+        <h3>Add a Comment</h3>
+        <form method="post" action="/create-comment">
+            <table>
+                <tr>
+                    <td><input class="user_input" type="text" name="text"></td>
+                    <td><input class = "submit" type="submit" value="Send"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
     <table cellspacing="5">
     {% for cmt in comments %}
        <tr>
-            <td class="comment"> <span style="color: #585858;">>{{ cmt['user'] }}:</span><br>{{ cmt['text'] }}</td>
+            <td class="comment"> <span style="color: #585858;">{{ cmt['user'] }} @ {{ cmt['time'] }}:</span><br>>{{ cmt['text'] }}</td>
         </tr>
     {% else %}
         <td><td>There are no comments yet.</td></tr>
     {% endfor %}
     </table>
-
-
-<div class="commentForm">
-    <h2>Add a comment</h2>
-    <form method="post" action="/create-comment">
-        <table>
-            <tr>
-                <td><input class="user_input" type="text" name="text"></td>
-                <td><input class = "submit" type="submit" value="Send"></td>
-            </tr>
-        </table>
-    </form>
-</div>
 </div>
 {% endblock %}
 {% block script %}

@@ -74,12 +74,13 @@ def handle_request_add_coment():
 
 @app.route('/get-scores')
 def get_scores():
-    user = get_user(flask.request.args['user_key_field'])
+    user_key = flask.request.args['user_key_field']    
+    user = get_user(user_key)
     user_id = user['id']
 
     params = {
         'include_fails': 1,
-        'limit': 100
+        'limit': 10
     }
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
@@ -89,7 +90,7 @@ def get_scores():
     current_scores = scores_json
     
     cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', scores=scores_json, comments=cmt_list)
+    return flask.render_template('profile.html', scores=scores_json, comments=cmt_list, user=user_key)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
