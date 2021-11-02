@@ -5,7 +5,7 @@ from google.cloud import datastore
 app = flask.Flask(__name__)
 
 def get_client():
-    return datastore.Client()
+    return datastore.Client('osu-keep')
 
 def clean(s):
     """Return a string w/ angle brackets, endlines, & tab characters removed."""
