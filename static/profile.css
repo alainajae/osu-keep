@@ -1,0 +1,27 @@
+html {
+    background-color: var(--myGrey)
+}
+
+#score-table, #user-title {
+    color: white
+}
+
+#score-table {
+    margin: 1rem;
+}
+
+.commentForm {
+    background: var(--osuPink);
+    padding: 1%;
+    border-radius: 8px;
+    width: 25%;
+}
+
+.comment {
+    margin: 1rem;
+    padding: 1rem;
+    background: hotpink;
+    width: 100%;
+    border-radius: 8px;
+    text-align: left;
+}

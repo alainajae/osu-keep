@@ -1,13 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
-
-:root {
-    --osuPink: #FF66AA;
-    --inputSpacing: 0.5rem;
-    --transitionDuration: 100ms;
-    --myGrey: #333;
-    --radius: 1rem;
-}
-
 body, html{
     margin: 0;
     padding: 0;
@@ -65,36 +55,6 @@ h1.title{
     border: 2px solid black;
 }
 
-.topnav {
-    background-color: var(--myGrey);
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    right: 0;
-}
-  
-/* Style the links inside the navigation bar */
-.topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 8px 26px;
-    text-decoration: none;
-    font-size: 17px;
-}
-  
-  /* Change the color of links on hover */
-.topnav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-  
-/* Add a color to the active/current link */
-.topnav a.active {
-    background-color: var(--osuPink);
-    color: white;
-}
-
 .get_user{
     width: 20rem;  
     overflow: hidden;  
@@ -115,26 +75,6 @@ input[type=text]{
 
 .text{
     color: white;
-}
-
-.commentForm {
-    background: var(--osuPink);
-    padding: 1%;
-    border-radius: 8px;
-}
-
-.comment {
-    margin: 2%;
-    padding: 1%;
-    background: hotpink;
-    width: 50vw;
-    border-radius: 8px;
-    text-align: left;
-        
-}
-
-html{
-    font-family: 'Rubik', sans-serif;
 }
 
 .center {

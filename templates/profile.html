@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<h1>{{user}}'s Profile</h1>
+{% block link %}
+<link rel="stylesheet" href="../static/profile.css">
+{% endblock %}
+<h1 id="user-title">{{user}}'s Profile</h1>
 
 <div>
-    <table>
+    <table id="score-table">
         <thead>
             <tr>
                 <td>#</td>
@@ -15,7 +17,7 @@
                 <td>PP</td>
             </tr>
         </thead>
-        <tbody id="score-table">
+        <tbody id="score-table-body">
 
         </tbody>
     </table>
@@ -54,7 +56,7 @@
         console.log(dom.body.textContent)
         let scores = JSON.parse(dom.body.textContent)
 
-        const scoreTable = document.getElementById('score-table');
+        const scoreTable = document.getElementById('score-table-body');
 
         for (let i = 0; i < Object.keys(scores).length; i++) {
             const beatmapSet = scores[i]['beatmapset']

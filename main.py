@@ -15,6 +15,7 @@ app = flask.Flask(__name__)
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 current_scores = {}
+current_user = ""
 
 cm = comment.ChatManager()
 
@@ -70,7 +71,7 @@ def handle_request_add_coment():
     text = flask.request.values['text']
     cm.create_cmt('user', text)
     cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', scores=current_scores, comments=cmt_list)
+    return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
 
 @app.route('/get-scores')
 def get_scores():
@@ -87,7 +88,9 @@ def get_scores():
     user_scores = response.json()
     scores_json = json.dumps(user_scores)
     global current_scores
+    global current_user
     current_scores = scores_json
+    current_user = user_key
     
     cmt_list = cm.get_cmts()
     return flask.render_template('profile.html', scores=scores_json, comments=cmt_list, user=user_key)
