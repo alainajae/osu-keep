@@ -9,6 +9,8 @@ import dotenv
 dotenv.load_dotenv()
 
 import os
+if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
 
 app = flask.Flask(__name__)
 
@@ -73,6 +75,11 @@ def handle_request_add_coment():
     cmt_list = cm.get_cmts()
     return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
 
+@app.route('/get-scores-data', methods=['GET'])
+def get_scores_data():
+    print(current_scores)
+    return current_scores
+    
 @app.route('/get-scores')
 def get_scores():
     user_key = flask.request.args['user_key_field']    
@@ -81,19 +88,21 @@ def get_scores():
 
     params = {
         'include_fails': 1,
-        'limit': 10
+        'limit': 100
     }
 
+    # Request scores from osu! and store as json locally
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
-    user_scores = response.json()
-    scores_json = json.dumps(user_scores)
+    user_scores = response.json() # this is not actually a json its just a python list
+    scores_json = flask.jsonify(user_scores)
     global current_scores
-    global current_user
     current_scores = scores_json
+
+    global current_user
     current_user = user_key
     
     cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', scores=scores_json, comments=cmt_list, user=user_key)
+    return flask.render_template('profile.html', comments=cmt_list, user=user_key)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
