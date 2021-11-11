@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+:root {
+    --osuPink: #FF66AA;
+    --inputSpacing: 0.5rem;
+    --transitionDuration: 100ms;
+    --myGrey: #333;
+    --radius: 1rem;
+}
+
+html {
+    font-family: 'Rubik', sans-serif;
+}
+
+.topnav {
+    background-color: var(--myGrey);
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 8px 26px;
+    text-decoration: none;
+    font-size: 17px;
+}
+  
+  /* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+  
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: var(--osuPink);
+    color: white;
+}

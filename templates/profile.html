@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+{% block link %}
+<link rel="stylesheet" href="../static/profile.css">
+{% endblock %}
+<h1 id="user-title">{{user}}'s Profile</h1>
+
+<div>
+    <table id="score-table">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>Rank</td>
+                <td>Beatmap</td>
+                <td>Acc</td>
+                <td>Combo</td>
+                <td>PP</td>
+            </tr>
+        </thead>
+        <tbody id="score-table-body">
+
+        </tbody>
+    </table>
+</div>
+
+<div class="center">
+    <div class="commentForm">
+        <h3>Add a Comment</h3>
+        <form method="post" action="/create-comment">
+            <table>
+                <tr>
+                    <td><input class="user_input" type="text" name="text"></td>
+                    <td><input class = "submit" type="submit" value="Send"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <table cellspacing="5">
+    {% for cmt in comments %}
+       <tr>
+            <td class="comment"> <span style="color: #585858;">{{ cmt['user'] }} @ {{ cmt['time'] }}:</span><br>>{{ cmt['text'] }}</td>
+        </tr>
+    {% else %}
+        <td><td>There are no comments yet.</td></tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
+{% block script %}
+<script src="../static/profile.js"></script>
+{% endblock %}
