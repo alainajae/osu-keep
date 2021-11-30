@@ -36,15 +36,7 @@
         </form>
     </div>
 
-    <table cellspacing="5">
-    {% for cmt in comments %}
-       <tr>
-            <td class="comment"> <span style="color: #585858;">{{ cmt['user'] }} @ {{ cmt['time'] }}:</span><br>>{{ cmt['text'] }}</td>
-        </tr>
-    {% else %}
-        <td><td>There are no comments yet.</td></tr>
-    {% endfor %}
-    </table>
+    <table id="comments" cellspacing="5"></table>
 </div>
 {% endblock %}
 {% block script %}

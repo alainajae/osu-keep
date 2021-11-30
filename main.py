@@ -1,8 +1,6 @@
 import flask
 import requests
 import comment
-import json
-import pprint
 
 # import environment variables from .env
 import dotenv
@@ -18,6 +16,7 @@ API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 
 current_scores = {}
+current_comments = []
 
 cm = comment.ChatManager()
 
@@ -65,30 +64,39 @@ def get_user(user_key):
     return response.json()
 
 def request_scores(user_id):
+    """
+    Requests user scores from osu API and stores in global variable
+    """
     params = {
         'include_fails': 1,
         'limit': 100
     }
 
-    # Request scores from osu! and store as json locally
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
     user_scores = response.json() # this is not actually a json its just a python list
     scores_json = flask.jsonify(user_scores)
     global current_scores
     current_scores = scores_json
 
-@app.route('/create-comment-old', methods=['POST', 'GET'])
-def handle_request_add_coment():
-    text = flask.request.values['text']
-    cm.create_cmt('user', text)
-    cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
+# @app.route('/create-comment-old', methods=['POST', 'GET'])
+# def handle_request_add_coment():
+#     text = flask.request.values['text']
+#     cm.create_cmt('user', text)
+#     cmt_list = cm.get_cmts()
+#     return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
+
+@app.route('/get-comments', methods=['GET'])
+def get_comments():
+    return flask.jsonify(cm.get_cmts())
 
 @app.route('/create-comment', methods=['POST'])
 def handle_create_comment():
+    """
+    Creates a comment and returns a comment list
+    """
     text = flask.request.values['comment-text']
     cm.create_cmt('user', text) # TODO: replace 'user' with current logged in user
-    return 
+    return flask.jsonify(cm.get_cmts())
 
 @app.route('/get-scores', methods=['GET'])
 def get_scores_data():
