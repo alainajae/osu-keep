@@ -16,7 +16,7 @@ API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 
 current_scores = {}
-current_comments = []
+current_comments = {}
 
 cm = comment.ChatManager()
 
@@ -69,7 +69,7 @@ def request_scores(user_id):
     """
     params = {
         'include_fails': 1,
-        'limit': 100
+        'limit': 1
     }
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
@@ -87,16 +87,18 @@ def request_scores(user_id):
 
 @app.route('/get-comments', methods=['GET'])
 def get_comments():
-    return flask.jsonify(cm.get_cmts())
+    global current_comments
+    current_comments = flask.jsonify(cm.get_cmts())
+    return current_comments
 
 @app.route('/create-comment', methods=['POST'])
 def handle_create_comment():
     """
     Creates a comment and returns a comment list
     """
-    text = flask.request.values['comment-text']
-    cm.create_cmt('user', text) # TODO: replace 'user' with current logged in user
-    return flask.jsonify(cm.get_cmts())
+    comment_message = flask.request.get_json(silent=True)['message']
+    cm.create_cmt('user', comment_message) # TODO: replace 'user' with current logged in user
+    return get_comments()
 
 @app.route('/get-scores', methods=['GET'])
 def get_scores_data():

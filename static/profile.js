@@ -1,10 +1,11 @@
 window.addEventListener('load', function() {
-    load_scores()
-    load_comments()
+    loadScores()
+    loadComments()
 });
 
-// Handles loading scores into DOM
-async function load_scores() {
+// Loads scores
+async function loadScores() {
+    // Get scores from Flask
     const scores = await fetch('/get-scores')
         .then(function(response) {
             return response.json();
@@ -12,8 +13,6 @@ async function load_scores() {
         .then(function(data) {
             return data;
         });
-    
-    console.log(scores)
 
     const scoreTable = document.getElementById('score-table-body');
 
@@ -37,8 +36,9 @@ async function load_scores() {
     }
 }
 
-// Handles loading comments into DOM
-async function load_comments() {
+
+// Loads comment section
+async function loadComments() {
     const comments = await fetch('/get-comments')
         .then(function(response) {
             return response.json();
@@ -46,10 +46,9 @@ async function load_comments() {
         .then(function(data) {
             return data;
         });
-    
-    console.log(comments)
 
     const commentSection = document.getElementById('comments');
+    commentSection.innerHTML = ''
 
     for (let i = 0; i < Object.keys(comments).length; i++) {
         commentSection.innerHTML += 
@@ -65,4 +64,17 @@ async function load_comments() {
         </tr>
         `
     }
+}
+
+// POSTs a comment message to Flask and updates comment section
+async function postComment() {
+    const comments = fetch("/create-comment", {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+          message: document.getElementById('comment-text')['value']
+        })
+    })
+    
+    loadComments()
 }
