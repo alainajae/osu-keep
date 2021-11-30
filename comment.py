@@ -1,11 +1,30 @@
 import datetime
-import flask
 from google.cloud import datastore
-
-app = flask.Flask(__name__)
 
 def get_client():
     return datastore.Client('osu-keep')
+
+
+def ds_create_comment():
+    client = get_client()
+    # Calling key without an ID will generate (an int) one for you.
+    key = client.key('comment')
+    return datastore.Entity(key)
+
+def ds_get_comments():
+    result = []
+    client = get_client()
+    query = client.query(kind='comment')
+    for entity in query.fetch():
+        result.append(Comment(entity['user'], entity['text'], entity['time']))
+    result.sort()
+    return result
+    
+
+def ds_put_comment(ds_comment):
+    client = get_client()
+    client.put(ds_comment)
+
 
 def clean(s):
     """Return a string w/ angle brackets, endlines, & tab characters removed."""
@@ -21,11 +40,11 @@ def clean(s):
     return s
 
 
-class Message():
-    """An object representing a single chat message."""
+class Comment():
+    """An object representing a single chat comment."""
 
     def __init__(self, user, text, time=None):
-        """Initialize a message for named user."""
+        """Initialize a comment for named user."""
 
         self.user = user
         self.text = text
@@ -33,28 +52,17 @@ class Message():
         if time:
             self.time = time
         else:
-            self.time = datetime.datetime.now()
+            self.time = datetime.datetime.now(datetime.timezone.utc)
 
 
     def get_formatted_time(self):
-        """Return this messages's time as a 'YYYYMMDD HH:MM:SS' string."""
+        """Return this comments' time as a 'YYYYMMDD HH:MM:SS' string."""
 
         return self.time.strftime('%Y%m%d %H:%M:%S')
 
 
-    def to_html(self):
-        """Convert this message to an HTML div."""
-        
-        outputDiv = '<div class="Message">%s (%s): %s</div>'
-        span = '<span class="%s">%s</span>'
-        timeSpan = span % ('Time', self.get_formatted_time())
-        userSpan = span % ('User', self.user)
-        textSpan = span % ('Text', self.text)
-        return outputDiv % (timeSpan, userSpan, textSpan)
-
-
     def __str__(self):
-        """Return a simple formatted string with the message contents."""
+        """Return a simple formatted string with the comment contents."""
 
         return '%s (%s): %s' % (self.get_formatted_time(), self.user, self.text)
     
@@ -83,53 +91,49 @@ class Message():
         return self.time >= other.time
 
 
-class ChatManager():
-    """A class for managing chat messages."""
+class CommentSection():
+    """A class for managing chat comments."""
 
     def __init__(self):
-        """Initialize the ChatManager with a new list of messages."""
+        """Initialize the CommentSection with a new list of comments."""
 
-        self.messages = []
-
-    def get_client(self):
-        return datastore.Client()
-
-    def add_message(self, msg):
-        """Add a message to our messages list."""
-
-        self.messages.append(msg)        
-        self.messages.sort()
-        
-    
-    def create_cmt(self, user, text):
-        """Create a new message with the current timestamp."""
-
-        self.add_message(Message(clean(user), clean(text)))
-        client = get_client()
-        key = client.key('cmt')
-        cmt = datastore.Entity(key)
-        cmt['user'] = user
-        cmt['text'] = text
-        cmt['time'] = self.messages[-1].time
-        client.put(cmt)
-        return cmt
+        self.comments = []
 
 
-    def get_messages_html(self):
-        """Return the current message contents as HTML."""
+    def add_comment(self, msg):
+        """Add a comment to our comments list."""
 
-        result = ''
-        for msg in self.messages:
-            result += msg.to_html()
-            result += '\n'
-        return result
+        # Create comment entity in datastore and add comment fields to it
+        ds_comment = ds_create_comment()
+        ds_comment['user'] = msg.user
+        ds_comment['text'] = msg.text
+        ds_comment['time'] = msg.time
+        ds_put_comment(ds_comment)
 
-    
-    def get_cmts(self):
+        # Add comment object to list
+        self.comments.append(msg)
+        self.comments.sort()
+
+
+    def create_comment(self, user, text):
+        """Create a new comment with the current timestamp."""
+
+        self.add_comment(Comment(clean(user), clean(text)))
+
+    def get_comments_list(self, reverse=True):
+        """Return the current comment list as JSON list"""
+
+        self.comments = ds_get_comments()
+
         result = []
-        client = get_client()
-        query = client.query(kind='cmt')
-        for entity in query.fetch():
-            result.append(entity)
-        return result
+        for comment in self.comments:
+            result.append({
+                'user': comment.user,
+                'text': comment.text,
+                'time': comment.time
+            })
 
+        if reverse:
+            result.reverse()
+
+        return result

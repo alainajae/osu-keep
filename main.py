@@ -18,7 +18,7 @@ TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 current_scores = {}
 current_comments = {}
 
-cm = comment.ChatManager()
+comment_section = comment.CommentSection()
 
 @app.route('/')
 @app.route('/index.html')
@@ -69,7 +69,7 @@ def request_scores(user_id):
     """
     params = {
         'include_fails': 1,
-        'limit': 1
+        'limit': 100
     }
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
@@ -78,17 +78,10 @@ def request_scores(user_id):
     global current_scores
     current_scores = scores_json
 
-# @app.route('/create-comment-old', methods=['POST', 'GET'])
-# def handle_request_add_coment():
-#     text = flask.request.values['text']
-#     cm.create_cmt('user', text)
-#     cmt_list = cm.get_cmts()
-#     return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
-
 @app.route('/get-comments', methods=['GET'])
 def get_comments():
     global current_comments
-    current_comments = flask.jsonify(cm.get_cmts())
+    current_comments = flask.jsonify(comment_section.get_comments_list())
     return current_comments
 
 @app.route('/create-comment', methods=['POST'])
@@ -97,7 +90,7 @@ def handle_create_comment():
     Creates a comment and returns a comment list
     """
     comment_message = flask.request.get_json(silent=True)['message']
-    cm.create_cmt('user', comment_message) # TODO: replace 'user' with current logged in user
+    comment_section.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
     return get_comments()
 
 @app.route('/get-scores', methods=['GET'])
@@ -110,9 +103,7 @@ def get_profile():
     user = get_user(user_key)
     user_id = user['id']
     request_scores(user_id)
-    
-    cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', comments=cmt_list, user=user_key)
+    return flask.render_template('profile.html', user=user_key)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
