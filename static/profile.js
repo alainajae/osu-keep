@@ -1,6 +1,9 @@
 window.addEventListener('load', async function() {
 
-    let scores = await fetch('/get-scores-data')
+    /*
+    Handles loading the scores into DOM
+    */
+    const scores = await fetch('/get-scores')
         .then(function(response) {
             return response.json();
         })
