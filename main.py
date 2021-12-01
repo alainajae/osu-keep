@@ -78,6 +78,9 @@ def request_scores(user_id):
 
 @app.route('/get-comments', methods=['GET'])
 def get_comments():
+    """
+    Updates global comment list and returns it
+    """
     global current_comments
     current_comments = flask.jsonify(comment.get_comments_list())
     return current_comments
@@ -97,6 +100,9 @@ def get_scores_data():
     
 @app.route('/get-profile')
 def get_profile():
+    """
+    Render profile page from given username or user ID
+    """
     user_key = flask.request.args['user']    
     user = get_user(user_key)
     user_id = user['id']

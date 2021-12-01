@@ -12,6 +12,7 @@ def ds_create_comment():
     return datastore.Entity(key)
 
 def ds_get_comments(rev=True):
+    """Query datastore for comments and return an array of type Comment"""
     result = []
     client = get_client()
     query = client.query(kind='comment')

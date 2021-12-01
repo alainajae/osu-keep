@@ -70,8 +70,7 @@ async function loadComments(comments={}) {
         }
     }
 
-    //Reset comments for rebuilding
-    commentSection.innerHTML = ''
+    commentSection.innerHTML = '' //Reset comments for rebuilding
 
     for (let i = 0; i < Object.keys(comments).length; i++) {
         commentSection.innerHTML += 
@@ -89,14 +88,14 @@ async function loadComments(comments={}) {
     }
 }
 
-// POSTs a comment message to Flask and updates comment section
+//POSTs a comment message to Flask and updates comment section
 async function postComment() {
     commentText = document.getElementById('comment-text')
-    posting = document.getElementById('posting') // Placeholder element that tells the user comment is posting
-    console.log(posting.innerHTML)
-    posting.innerText = 'Posting...'
-    console.log(posting.innerHTML)
+    posting = document.getElementById('posting') //Placeholder element that tells the user comment is posting
+    posting.innerText = 'Posting...' //Show user that comment is posting
 
+
+    //POST Request to Flask to create comment and then returns a JSON of new comments
     const comments = await fetch("/create-comment", {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
@@ -111,6 +110,7 @@ async function postComment() {
         return data;
     });
     
+    //Load comments into DOM and reset submission form
     loadComments(comments)
     posting.innerText = ''
     commentText.value = '';
