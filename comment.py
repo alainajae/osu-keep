@@ -11,15 +11,21 @@ def ds_create_comment():
     key = client.key('comment')
     return datastore.Entity(key)
 
-def ds_get_comments():
+def ds_get_comments(rev=True):
     result = []
     client = get_client()
     query = client.query(kind='comment')
+
     for entity in query.fetch():
         result.append(Comment(entity['user'], entity['text'], entity['time']))
-    result.sort()
-    return result
     
+    if rev:
+        result.sort(reverse=rev)
+    else:
+        result.sort()
+    
+    return result
+
 
 def ds_put_comment(ds_comment):
     client = get_client()
@@ -34,8 +40,6 @@ def clean(s):
     s = s.replace('\n', ' ')
     s = s.replace('\t', ' ')
     s = s.strip()
-    if len(s) > 100:
-        s = s[:100]
 
     return s
 
@@ -90,50 +94,36 @@ class Comment():
     def __ge__(self, other):
         return self.time >= other.time
 
+def add_comment(msg):
+    """Add a comment to our comments list."""
 
-class CommentSection():
-    """A class for managing chat comments."""
+    # Create comment entity in datastore and add comment fields to it
+    ds_comment = ds_create_comment()
+    ds_comment['user'] = msg.user
+    ds_comment['text'] = msg.text
+    ds_comment['time'] = msg.time
 
-    def __init__(self):
-        """Initialize the CommentSection with a new list of comments."""
-
-        self.comments = []
-
-
-    def add_comment(self, msg):
-        """Add a comment to our comments list."""
-
-        # Create comment entity in datastore and add comment fields to it
-        ds_comment = ds_create_comment()
-        ds_comment['user'] = msg.user
-        ds_comment['text'] = msg.text
-        ds_comment['time'] = msg.time
+    try:
         ds_put_comment(ds_comment)
-
-        # Add comment object to list
-        self.comments.append(msg)
-        self.comments.sort()
+    except:
+        return False
 
 
-    def create_comment(self, user, text):
-        """Create a new comment with the current timestamp."""
+def create_comment(user, text):
+    """Create a new comment with the current timestamp."""
 
-        self.add_comment(Comment(clean(user), clean(text)))
+    add_comment(Comment(clean(user), clean(text)))
 
-    def get_comments_list(self, reverse=True):
-        """Return the current comment list as JSON list"""
 
-        self.comments = ds_get_comments()
+def get_comments_list():
+    """Return the current comment list as JSON list"""
 
-        result = []
-        for comment in self.comments:
-            result.append({
-                'user': comment.user,
-                'text': comment.text,
-                'time': comment.time
-            })
+    result = []
+    for comment in ds_get_comments():
+        result.append({
+            'user': comment.user,
+            'text': comment.text,
+            'time': comment.time
+        })
 
-        if reverse:
-            result.reverse()
-
-        return result
+    return result

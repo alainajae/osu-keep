@@ -18,8 +18,6 @@ TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 current_scores = {}
 current_comments = {}
 
-comment_section = comment.CommentSection()
-
 @app.route('/')
 @app.route('/index.html')
 def root():
@@ -81,7 +79,7 @@ def request_scores(user_id):
 @app.route('/get-comments', methods=['GET'])
 def get_comments():
     global current_comments
-    current_comments = flask.jsonify(comment_section.get_comments_list())
+    current_comments = flask.jsonify(comment.get_comments_list())
     return current_comments
 
 @app.route('/create-comment', methods=['POST'])
@@ -90,7 +88,7 @@ def handle_create_comment():
     Creates a comment and returns a comment list
     """
     comment_message = flask.request.get_json(silent=True)['message']
-    comment_section.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
+    comment.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
     return get_comments()
 
 @app.route('/get-scores', methods=['GET'])

@@ -52,7 +52,6 @@ async function loadComments() {
         });
 
     if (Object.keys(comments).length == 0) {
-        console.log("hi")
         commentSection.innerHTML = 
         `
         <tbody>
@@ -83,11 +82,12 @@ async function loadComments() {
         </tr>
         `
     }
+    console.log("finished")
 }
 
 // POSTs a comment message to Flask and updates comment section
 async function postComment() {
-    const comments = fetch("/create-comment", {
+    fetch("/create-comment", {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
