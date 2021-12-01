@@ -2,7 +2,7 @@ html {
     background-color: var(--myGrey)
 }
 
-#score-table, #user-title {
+#score-table, #user-title, .placeholder {
     color: white
 }
 

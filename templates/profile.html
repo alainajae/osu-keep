@@ -18,7 +18,9 @@
             </tr>
         </thead>
         <tbody id="score-table-body">
-
+            <tr>
+                <td><h4 class="placeholder">Loading...</h4></td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -26,11 +28,23 @@
 <div class="center">
     <div class="commentForm">
         <h3>Add a Comment</h3>
-        <td><input class="user_input" id="comment-text" type="text" name="comment-text"></td>
-        <td><button onclick="postComment()">Post</td>
+        <form onsubmit="postComment();return false;">
+            <table>
+                <tr>
+                    <td><input id="comment-text" class="user_input" type="text" name="text"></td>
+                    <td><input class = "submit" type="submit" value="Send"></td>
+                </tr>
+            </table>
+        </form>
     </div>
 
-    <table id="comments" cellspacing="5"></table>
+    <table id="comments" cellspacing="5">
+        <tbody>
+            <tr>
+                <td><h4 class="placeholder">Loading...</h4></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 {% endblock %}
 {% block script %}

@@ -5,6 +5,8 @@ window.addEventListener('load', function() {
 
 // Loads scores
 async function loadScores() {
+    const scoreTable = document.getElementById('score-table-body');
+
     // Get scores from Flask
     const scores = await fetch('/get-scores')
         .then(function(response) {
@@ -13,8 +15,8 @@ async function loadScores() {
         .then(function(data) {
             return data;
         });
-
-    const scoreTable = document.getElementById('score-table-body');
+    
+    scoreTable.innerHTML = ''
 
     for (let i = 0; i < Object.keys(scores).length; i++) {
         const beatmapSet = scores[i]['beatmapset']
@@ -39,6 +41,8 @@ async function loadScores() {
 
 // Loads comment section
 async function loadComments() {
+    const commentSection = document.getElementById('comments');
+
     const comments = await fetch('/get-comments')
         .then(function(response) {
             return response.json();
@@ -47,7 +51,22 @@ async function loadComments() {
             return data;
         });
 
-    const commentSection = document.getElementById('comments');
+    if (Object.keys(comments).length == 0) {
+        console.log("hi")
+        commentSection.innerHTML = 
+        `
+        <tbody>
+            <tr>
+                <td class="placeholder"> 
+                    No comments yet
+                </td>
+            </tr>
+        <tbody>
+        `
+
+        return
+    }
+    
     commentSection.innerHTML = ''
 
     for (let i = 0; i < Object.keys(comments).length; i++) {
@@ -77,4 +96,5 @@ async function postComment() {
     })
     
     loadComments()
+    document.getElementById("comment-text").value = '';
 }
