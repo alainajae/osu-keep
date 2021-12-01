@@ -40,10 +40,12 @@ async function loadScores() {
 
 
 // Loads comment section
-async function loadComments() {
+async function loadComments(comments={}) {
     const commentSection = document.getElementById('comments');
-
-    const comments = await fetch('/get-comments')
+    //First see if comments are passed in
+    if (isEmpty(comments)) {
+        //If not then fetch them from Flask
+        comments = await fetch('/get-comments')
         .then(function(response) {
             return response.json();
         })
@@ -51,21 +53,24 @@ async function loadComments() {
             return data;
         });
 
-    if (Object.keys(comments).length == 0) {
-        commentSection.innerHTML = 
-        `
-        <tbody>
-            <tr>
-                <td class="placeholder"> 
-                    No comments yet
-                </td>
-            </tr>
-        <tbody>
-        `
+        //If its still empty, then no comments have been made
+        if (isEmpty(comments)) {
+            commentSection.innerHTML = 
+            `
+            <tbody>
+                <tr>
+                    <td class="placeholder"> 
+                        No comments yet
+                    </td>
+                </tr>
+            <tbody>
+            `
 
-        return
+            return
+        }
     }
-    
+
+    //Reset comments for rebuilding
     commentSection.innerHTML = ''
 
     for (let i = 0; i < Object.keys(comments).length; i++) {
@@ -82,19 +87,37 @@ async function loadComments() {
         </tr>
         `
     }
-    console.log("finished")
 }
 
 // POSTs a comment message to Flask and updates comment section
 async function postComment() {
-    fetch("/create-comment", {
+    commentText = document.getElementById('comment-text')
+    posting = document.getElementById('posting') // Placeholder element that tells the user comment is posting
+    console.log(posting.innerHTML)
+    posting.innerText = 'Posting...'
+    console.log(posting.innerHTML)
+
+    const comments = await fetch("/create-comment", {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-          message: document.getElementById('comment-text')['value']
+          message: commentText.value
         })
     })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        return data;
+    });
     
-    loadComments()
-    document.getElementById("comment-text").value = '';
+    loadComments(comments)
+    posting.innerText = ''
+    commentText.value = '';
+}
+
+//This isn't built into Javascript for whatever reason
+function isEmpty(obj) {
+    for (const i in obj) return false;
+    return true;
 }

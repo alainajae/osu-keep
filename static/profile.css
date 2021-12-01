@@ -10,7 +10,7 @@ html {
     margin: 1rem;
 }
 
-.commentForm {
+#commentForm {
     background: var(--osuPink);
     padding: 1%;
     border-radius: 8px;
