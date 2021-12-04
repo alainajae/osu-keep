@@ -15,9 +15,6 @@ app = flask.Flask(__name__)
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 
-current_scores = {}
-current_comments = {}
-
 @app.route('/')
 @app.route('/index.html')
 def root():
@@ -61,10 +58,28 @@ def get_user(user_key):
     response = requests.get(f'{API_URL}/users/{user_key}', params=params, headers=HEADERS)
     return response.json()
 
-def request_scores(user_id):
+@app.route('/get-comments', methods=['GET'])
+def get_comments():
     """
-    Requests user scores from osu API and stores in global variable
+    Gets comments list and returns it as JSON
     """
+    return flask.jsonify(comment.get_comments_list())
+
+@app.route('/create-comment', methods=['POST'])
+def handle_create_comment():
+    """
+    Creates a comment from the given POST request and returns a comment list
+    """
+    comment_message = flask.request.get_json(silent=True)['message']
+    comment.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
+    return get_comments()
+
+@app.route('/get-scores', methods=['GET'])
+def get_scores():
+    """
+    Requests user scores from osu API using given User ID in request header and returns best 100 scores by pp
+    """
+    user_id = flask.request.headers.get('user_id')
     params = {
         'include_fails': 1,
         'limit': 100
@@ -72,31 +87,7 @@ def request_scores(user_id):
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
     user_scores = response.json() # this is not actually a json its just a python list
-    scores_json = flask.jsonify(user_scores)
-    global current_scores
-    current_scores = scores_json
-
-@app.route('/get-comments', methods=['GET'])
-def get_comments():
-    """
-    Updates global comment list and returns it
-    """
-    global current_comments
-    current_comments = flask.jsonify(comment.get_comments_list())
-    return current_comments
-
-@app.route('/create-comment', methods=['POST'])
-def handle_create_comment():
-    """
-    Creates a comment and returns a comment list
-    """
-    comment_message = flask.request.get_json(silent=True)['message']
-    comment.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
-    return get_comments()
-
-@app.route('/get-scores', methods=['GET'])
-def get_scores_data():
-    return current_scores
+    return flask.jsonify(user_scores)
     
 @app.route('/get-profile')
 def get_profile():
@@ -106,8 +97,8 @@ def get_profile():
     user_key = flask.request.args['user']    
     user = get_user(user_key)
     user_id = user['id']
-    request_scores(user_id)
-    return flask.render_template('profile.html', user=user_key)
+    username = user['username']
+    return flask.render_template('profile.html', user_id=user_id, username = username)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

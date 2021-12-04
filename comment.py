@@ -117,7 +117,7 @@ def create_comment(user, text):
 
 
 def get_comments_list():
-    """Return the current comment list as JSON list"""
+    """Return the current comment list as dict list"""
 
     result = []
     for comment in ds_get_comments():

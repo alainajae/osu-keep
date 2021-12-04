@@ -6,15 +6,21 @@ window.addEventListener('load', function() {
 // Loads scores
 async function loadScores() {
     const scoreTable = document.getElementById('score-table-body');
-
+    const user_id = parseInt(document.getElementById('user-title').dataset.user)
     // Get scores from Flask
-    const scores = await fetch('/get-scores')
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            return data;
-        });
+    const scores = await fetch('/get-scores', {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'user_id': user_id
+        }
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        return data;
+    });
     
     scoreTable.innerHTML = ''
 
@@ -99,9 +105,7 @@ async function postComment() {
     const comments = await fetch("/create-comment", {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-          message: commentText.value
-        })
+      body: JSON.stringify({message: commentText.value})
     })
     .then(function(response) {
         return response.json();
