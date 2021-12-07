@@ -18,6 +18,7 @@ html, body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center center; 
+    margin: 0;
 }
 
 #content {
@@ -30,6 +31,7 @@ html, body {
     position: fixed;
     top: 0;
     right: 0;
+    z-index: 1;
 }
 
 /* Style the links inside the navigation bar */
