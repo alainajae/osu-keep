@@ -1,6 +1,65 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300");
 html {
-    background-color: var(--myGrey)
+    background-color: var(--myGrey);
 }
+
+
+.username {
+    --border-width: 3px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 422px;
+    padding-right: 422px;
+    color: white;
+    background: #222;
+    border-radius: var(--border-width);
+  }
+  .username::after {
+    position: absolute;
+    content: "";
+    top: calc(-1 * var(--border-width));
+    left: calc(-1 * var(--border-width));
+    z-index: -1;
+    width: calc(100% + var(--border-width) * 2);
+    height: calc(100% + var(--border-width) * 2);
+    background: linear-gradient(60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
+    background-size: 300% 300%;
+    background-position: 0 50%;
+    border-radius: calc(2 * var(--border-width));
+    animation: moveGradient 4s alternate infinite;
+  }
+  
+  @keyframes moveGradient {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+
+#stats{
+    background-color: var(--myGrey);
+}
+
+
+
+body{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: left;    
+   
+    background-image: url("osubackground.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center; 
+}
+
+
 
 #score-table, #user-title, .placeholder {
     color: white
@@ -11,17 +70,36 @@ html {
 }
 
 #commentForm {
-    background: var(--osuPink);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: left;
+    flex-direction: column;
+    text-align: left;    
+    background: #222;
     padding: 1%;
-    border-radius: 8px;
-    width: 25%;
+    height: 110px;
+    color: white;
+    
+}
+
+#comment-text{
+    border-radius: 5px;
+    padding: 12px 20px;    
+    width: 1030px;    
 }
 
 .comment {
     margin: 1rem;
     padding: 1rem;
-    background: hotpink;
-    width: 100%;
+    background: #6bb2d7;
+    padding-right: 870px;
+    
     border-radius: 8px;
     text-align: left;
+}
+
+.submit{
+    border-radius: 5px;
+    padding: 12px 20px;  
 }
