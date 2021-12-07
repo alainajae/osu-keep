@@ -82,10 +82,8 @@ async function loadComments(comments={}) {
         commentSection.innerHTML += 
         `
         <tr>
-            <td class="comment"> 
-                <span style="color: #585858;">
+            <td class="comment">
                     ${comments[i]['user']} @ ${comments[i]['time']}:
-                </span>
                 <br>
                 >${comments[i]['text']}
             </td>

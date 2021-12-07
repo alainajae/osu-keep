@@ -1,11 +1,8 @@
-#block{/*background for homepage*/
-    background-color: var(--myGrey);
+#content{/*background for homepage*/
     display: flex;
     justify-content: center;
     align-content: center;
     align-items: center;
-    width: 81vh;
-    height: 100vh;; 
 }
 
 body, html{
@@ -35,15 +32,7 @@ h1.title{
     font-size: 64px;
     color: white;
     font-weight: bold;
-    
-    background-color: #222;
-    width: 81vh;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    
 }
-
-
 
 .user_input {
     outline: none;
@@ -100,6 +89,3 @@ input[type=text]{
     width: 50%;
     padding: 10px;
 }
-
-
-  

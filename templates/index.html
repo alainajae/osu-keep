@@ -3,21 +3,20 @@
 <link rel="stylesheet" href="../static/styles.css">
 <link rel="stylesheet" href="../static/loading_screen.css">
 {% endblock %}
-{% block content %}
-
+{% block loading %}
 <div id="loading-screen">
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 </div>
-<div id="block">
-    <h1 class="title">osu!keep</h1>
+{% endblock %}
+{% block content %}
 
-    <div class="get_user">
-        <form method="get" action="/get-profile">
-            <input class="user_input" type="text" name="user" placeholder="Username or User ID" min="0">
-            <input class="submit" type="submit" value="Go">
-        </form>
-    </div>
-</div>
+<h1 class="title">osu!keep</h1>
+
+<div class="get_user">
+    <form method="get" action="/get-profile">
+        <input class="user_input" type="text" name="user" placeholder="Username or User ID" min="0">
+        <input class="submit" type="submit" value="Go">
+    </form>
 
 {% endblock %}
 {% block script %}

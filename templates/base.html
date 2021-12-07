@@ -13,10 +13,16 @@
             <a href="index.html">Home</a>
             <a href="aboutus.html">About Us</a>
             <a href="login.html">Login</a>
-        </div> 
+        </div>
 
-        {% block content %}
+        {% block loading %}
         {% endblock %}
+
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
 
     </body>
 

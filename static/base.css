@@ -6,10 +6,22 @@
     --transitionDuration: 100ms;
     --myGrey: #333;
     --radius: 1rem;
+    --border-width: 10px;
+    --spacing: 1rem;
 }
 
-html {
+html, body {
     font-family: 'Rubik', sans-serif;
+    background-color: var(--myGrey);
+    background-image: url("osubackground.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center; 
+}
+
+#content {
+    width: 80%;
 }
 
 .topnav {
