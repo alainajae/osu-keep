@@ -1,8 +1,6 @@
 import flask
 import requests
 import comment
-import json
-import pprint
 
 # import environment variables from .env
 import dotenv
@@ -16,10 +14,6 @@ app = flask.Flask(__name__)
 
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
-current_scores = {}
-current_user = ""
-
-cm = comment.ChatManager()
 
 @app.route('/')
 @app.route('/index.html')
@@ -63,46 +57,48 @@ def get_user(user_key):
     
     response = requests.get(f'{API_URL}/users/{user_key}', params=params, headers=HEADERS)
     return response.json()
-    
-# @app.route('/request-scores')
-# def request_scores():
-#     return flask.render_template('profile.html')
 
-@app.route('/create-comment', methods=['POST', 'GET'])
-def handle_request_add_coment():
-    text = flask.request.values['text']
-    cm.create_cmt('user', text)
-    cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', scores=current_scores, comments=cmt_list, user=current_user)
+@app.route('/get-comments', methods=['GET'])
+def get_comments():
+    """
+    Gets comments list and returns it as JSON
+    """
+    return flask.jsonify(comment.get_comments_list())
 
-@app.route('/get-scores-data', methods=['GET'])
-def get_scores_data():
-    print(current_scores)
-    return current_scores
-    
-@app.route('/get-scores')
+@app.route('/create-comment', methods=['POST'])
+def handle_create_comment():
+    """
+    Creates a comment from the given POST request and returns a comment list
+    """
+    comment_message = flask.request.get_json(silent=True)['message']
+    comment.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
+    return get_comments()
+
+@app.route('/get-scores', methods=['GET'])
 def get_scores():
-    user_key = flask.request.args['user_key_field']    
-    user = get_user(user_key)
-    user_id = user['id']
-
+    """
+    Requests user scores from osu API using given User ID in request header and returns best 100 scores by pp
+    """
+    user_id = flask.request.headers.get('user_id')
     params = {
         'include_fails': 1,
         'limit': 100
     }
 
-    # Request scores from osu! and store as json locally
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
     user_scores = response.json() # this is not actually a json its just a python list
-    scores_json = flask.jsonify(user_scores)
-    global current_scores
-    current_scores = scores_json
-
-    global current_user
-    current_user = user_key
+    return flask.jsonify(user_scores)
     
-    cmt_list = cm.get_cmts()
-    return flask.render_template('profile.html', comments=cmt_list, user=user_key)
+@app.route('/get-profile')
+def get_profile():
+    """
+    Render profile page from given username or user ID
+    """
+    user_key = flask.request.args['user']    
+    user = get_user(user_key)
+    user_id = user['id']
+    username = user['username']
+    return flask.render_template('profile.html', user_id=user_id, username = username)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

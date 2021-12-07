@@ -3,7 +3,7 @@
 {% block link %}
 <link rel="stylesheet" href="../static/profile.css">
 {% endblock %}
-<h1 id="user-title">{{user}}'s Profile</h1>
+<h1 id="user-title" data-user="{{user_id}}">{{username}}'s Profile</h1>
 
 <div>
     <table id="score-table">
@@ -18,32 +18,33 @@
             </tr>
         </thead>
         <tbody id="score-table-body">
-
+            <tr>
+                <td><h4 class="placeholder">Loading...</h4></td>
+            </tr>
         </tbody>
     </table>
 </div>
 
 <div class="center">
-    <div class="commentForm">
+    <div id="commentForm">
         <h3>Add a Comment</h3>
-        <form method="post" action="/create-comment">
+        <form onsubmit="postComment();return false;">
             <table>
                 <tr>
-                    <td><input class="user_input" type="text" name="text"></td>
+                    <td><input id="comment-text" class="user_input" type="text" name="text"></td>
                     <td><input class = "submit" type="submit" value="Send"></td>
                 </tr>
             </table>
         </form>
+        <h4 id="posting"></h4>
     </div>
 
-    <table cellspacing="5">
-    {% for cmt in comments %}
-       <tr>
-            <td class="comment"> <span style="color: #585858;">{{ cmt['user'] }} @ {{ cmt['time'] }}:</span><br>>{{ cmt['text'] }}</td>
-        </tr>
-    {% else %}
-        <td><td>There are no comments yet.</td></tr>
-    {% endfor %}
+    <table id="comments" cellspacing="5">
+        <tbody>
+            <tr>
+                <td><h4 class="placeholder">Loading...</h4></td>
+            </tr>
+        </tbody>
     </table>
 </div>
 {% endblock %}

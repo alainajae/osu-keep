@@ -2,7 +2,7 @@ html {
     background-color: var(--myGrey)
 }
 
-#score-table, #user-title {
+#score-table, #user-title, .placeholder {
     color: white
 }
 
@@ -10,7 +10,7 @@ html {
     margin: 1rem;
 }
 
-.commentForm {
+#commentForm {
     background: var(--osuPink);
     padding: 1%;
     border-radius: 8px;
