@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
-{% block content %}
 {% block link %}
 <link rel="stylesheet" href="../static/profile.css">
 {% endblock %}
-<h1 id="user-title" data-user="{{user_id}}">{{username}}'s Profile</h1>
+{% block content %}
 
-<div>
+<div id="username">
+    <div id="colorbar"></div>
+    <h1 id="user-title" data-user="{{user_id}}">{{username}}</h1>
+</div>
+
+
+<div id="stats">
     <table id="score-table">
         <thead>
             <tr>
@@ -25,16 +30,12 @@
     </table>
 </div>
 
-<div class="center">
-    <div id="commentForm">
-        <h3>Add a Comment</h3>
+<div id="comment-section">
+    <div id="comment-form">
+        <h3 id="comment-header">Comments</h3>
         <form onsubmit="postComment();return false;">
-            <table>
-                <tr>
-                    <td><input id="comment-text" class="user_input" type="text" name="text"></td>
-                    <td><input class = "submit" type="submit" value="Send"></td>
-                </tr>
-            </table>
+            <input id="comment-text" type="text" name="text" placeholder="add a public comment...">
+            <input id="submit" type="submit" value="Post">
         </form>
         <h4 id="posting"></h4>
     </div>
@@ -47,6 +48,7 @@
         </tbody>
     </table>
 </div>
+
 {% endblock %}
 {% block script %}
 <script src="../static/profile.js"></script>
