@@ -24,13 +24,14 @@ body{
     height: 10px;
     width: 100%;
     background: linear-gradient(60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
+    background-size: 300% 300%;
     border-radius: var(--border-width);
     animation: moveGradient 4s alternate infinite;
 }
 @keyframes moveGradient {
-    50% {
-        background-position: 100% 50%;
-    }
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
 
 #stats{
