@@ -2,6 +2,7 @@ import flask
 import requests
 import comment
 import login as authentication
+import api as API
 from functools import wraps
 
 # import environment variables from .env
@@ -70,9 +71,9 @@ def callback():
 		auth = authentication.Auth()
 		code = request.args.get( 'code' )
 		user = auth.authorize( code )
-		api = osuapi.OsuapiV2( user )
+		api = API.Osuapi(user)
 
-		me = api.get_me()
+		me = API.get_me()
 		session['user_name'] = str( me['username'] )
 		session['user_id'] = str( me['id'] )
 

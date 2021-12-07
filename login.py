@@ -14,7 +14,7 @@ class Auth():
 	def __init__( self ):
 		self.client_id = OSU_CLIENT_ID
 		self.client_secret = OSU_CLIENT_SECRET
-		self.redirect_uri = f'http://{ BASE_URL }/callback' 
+		self.redirect_uri = f'http://{BASE_URL}/callback' 
 		self.response_type = 'code'
 		self.scope = 'identify public'
 		self.state = OAUTH_STATE
@@ -30,7 +30,7 @@ class Auth():
 			'scope': self.scope,
 			'state': self.state
 		}
-		response = requests.get( self.auth_url, params = params )
+		response = requests.get(self.auth_url, params = params )
 		return response.url
 
 	def authorize( self, oauth_code ):
