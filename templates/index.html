@@ -8,15 +8,17 @@
 <div id="loading-screen">
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 </div>
+<div id="block">
+    <h1 class="title">osu!keep</h1>
 
-<h1 class="title">osu!keep</h1>
-
-<div class="get_user">
-    <form method="get" action="/get-profile">
-        <input class="user_input" type="text" name="user" placeholder="Username or User ID" min="0">
-        <input class="submit" type="submit" value="Go">
-    </form>
+    <div class="get_user">
+        <form method="get" action="/get-profile">
+            <input class="user_input" type="text" name="user" placeholder="Username or User ID" min="0">
+            <input class="submit" type="submit" value="Go">
+        </form>
+    </div>
 </div>
+
 {% endblock %}
 {% block script %}
 <script src="../static/script.js"></script>
