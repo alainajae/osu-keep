@@ -6,7 +6,7 @@ class Osuapi():
 		self.user = dict( user )
 		self.url = API_BASE_URL
 
-	def get_me( self ):
+	def get_user( self ):
 		headers = { 'Authorization': 'Bearer ' + self.user['access_token'] }
 		response = requests.get( self.url + '/me', headers = headers )
 		return response.json()

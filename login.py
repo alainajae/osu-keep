@@ -6,19 +6,15 @@ import dotenv
 dotenv.load_dotenv()
 OSU_CLIENT_ID = os.getenv( 'OSU_CLIENT_ID' )
 OSU_CLIENT_SECRET = os.getenv( 'OSU_CLIENT_SECRET' )
-OAUTH_STATE = os.getenv( 'OAUTH_STATE' )
-BASE_URL = 'osu-keep.uk.r.appspot.com'
+
 
 class Auth():
 	""" class for osu authentication """
 	def __init__( self ):
 		self.client_id = OSU_CLIENT_ID
 		self.client_secret = OSU_CLIENT_SECRET
-		self.redirect_uri = f'http://{BASE_URL}/callback' 
-		self.response_type = 'code'
-		self.scope = 'identify public'
-		self.state = OAUTH_STATE
-		self.grant_type = 'authorization_code'
+		self.redirect_uri = "https://osu-keep.appspot.com/callback/"
+		
 		self.auth_url = 'https://osu.ppy.sh/oauth/authorize'
 		self.token_url = 'https://osu.ppy.sh/oauth/token'
 	
@@ -26,11 +22,9 @@ class Auth():
 		params = {
 			'client_id': self.client_id,
 			'redirect_uri': self.redirect_uri,
-			'response_type': self.response_type,
-			'scope': self.scope,
-			'state': self.state
+			'response_type': 'code',
 		}
-		response = requests.get(self.auth_url, params = params )
+		response = requests.get(self.auth_url, params = params)
 		return response.url
 
 	def authorize( self, oauth_code ):
@@ -38,7 +32,7 @@ class Auth():
 			'client_id': self.client_id,
 			'client_secret': self.client_secret,
 			'code': oauth_code,
-			'grant_type': self.grant_type,
+			'grant_type': 'authorization_code',
 			'redirect_uri': self.redirect_uri
 		}
 		headers = { 'content_type': 'application/x-www-form-urlencoded' }

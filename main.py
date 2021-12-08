@@ -34,13 +34,15 @@ def login_required(f):
 	def decorated_function(*args, **kwargs):
 		try:
 			if session['user_name'] is None:
-				return redirect( url_for( 'page_unauthorized' ) )
+				return redirect( url_for( 'login' ) )
 		except Exception as e:
-			return redirect( url_for( 'page_unauthorized' ) )
+			return redirect( url_for( 'login' ) )
 		return f(*args, **kwargs)
 	return decorated_function
 
+'''Gets username, user id and logged in'''
 def get_login_info():
+
 	try:
 		return {
 			'user_name': session['user_name'],
@@ -60,24 +62,20 @@ def get_login_info():
 @app.route( '/login/', methods = ['GET'] )
 def login():
 	auth = authentication.Auth()
-	return flask.redirect( auth.request_auth())
+	return flask.redirect(auth.request_auth())
 
 @app.route( '/callback/' )
 def callback():
+    auth = authentication.Auth()
+    code = request.args.get('code')
+    user = auth.authorize(code)
+    api = API.Osuapi(user)
+    me = API.get_user()
 
-	state = request.args.get( 'state' )
-
-	if state == OAUTH_STATE:
-		auth = authentication.Auth()
-		code = request.args.get( 'code' )
-		user = auth.authorize( code )
-		api = API.Osuapi(user)
-
-		me = API.get_me()
-		session['user_name'] = str( me['username'] )
-		session['user_id'] = str( me['id'] )
-
-	return flask.redirect('/')
+    session['user_name'] = str(me['username'])
+    session['user_id'] = str(me['id'])
+    return flask.redirect('/')
+    
 
 
 """ logout user """

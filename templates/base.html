@@ -12,16 +12,17 @@
             <!-- class="active" is the attribute that makes the nav pink, maybe use javascript to fix it -->
             <a href="index.html">Home</a>
             <a href="aboutus.html">About Us</a>
-            {% if login['logged_in'] %}
-            <a id='me' href="/u/{{ login['user_id'] }}" class="nav-link">{{ login['user_name'] }}</a> |
-            <a id='logout' href="/logout" class="nav-link">logout</a>
-            {% else %}
-            <b><a id='login' href='/login' class="login-button">login</a></b>
-            {% endif %}
-        </div> 
+            <a href="/login">Login</a>
+        </div>
 
-        {% block content %}
+        {% block loading %}
         {% endblock %}
+
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
 
     </body>
 
