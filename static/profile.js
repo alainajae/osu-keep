@@ -12,7 +12,7 @@ async function loadScores() {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            'user_id': user_id
+            'user-id': user_id
         }
     })
     .then(function(response) {

@@ -79,7 +79,7 @@ def get_scores():
     """
     Requests user scores from osu API using given User ID in request header and returns best 100 scores by pp
     """
-    user_id = flask.request.headers.get('user_id')
+    user_id = flask.request.headers.get('user-id')
     params = {
         'include_fails': 1,
         'limit': 100
