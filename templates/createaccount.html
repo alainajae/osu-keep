@@ -4,21 +4,25 @@
 
 <h1 class="title">osu!keep</h1>
 
-<div class="sign up">        
-    <form id="sign up" method="get" action="login.php">  
+<div class="login">        
+    <form id="sign up" method="post" action="/docreateaccount">  
         <label><b>Email Address</b><br>    
         </label>    
-        <input type="email" name="Email" id="Email" placeholder="Email Address">    
+        <input type="Email" name="email" id="Email" placeholder="Email Address">    
         <br><br>    
         <label><b>Osu! User Name     
         </b>    
         </label>    
-        <input type="text" name="Uname" id="Uname" placeholder="Username">    
+        <input type="text" name="username" id="Uname" placeholder="Username">    
         <br><br>    
         <label><b>Password</b><br>    
         </label>    
-        <input type="Password" name="Pass" id="Pass" placeholder="Password">    
-        <br><br>    
+        <input type="Password" name="password1" id="Pass" placeholder="Password">    
+        <br><br>  
+        <label><b> Repeat Password</b><br>    
+        </label>    
+        <input type="Password" name="password2" id="Pass" placeholder="Password">    
+        <br><br>   
         <input type="submit" id="submit" value="Submit">       
         <br><br>    
     </form>     

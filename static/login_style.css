@@ -12,6 +12,8 @@ body
     height: 100vh; /*Necessary.  100vh = 100% of the viewport height*/
     padding: 0; /* No padding */
     margin: 0; /* No margins */
+    display: flex;
+    justify-content: center;
     background: url('osubackground.jpg') no-repeat center center;  
     /* Shorthand: image, repeat, X align, Y align. */
     background-size: cover; /* Cover all available space*/
@@ -27,8 +29,8 @@ body
     margin: 20 0 0 450px;  
     padding: 80px;  
     background: var(--osu-pink);  
-    border-radius: 15px ;  
-            
+    border-radius: 15px ; 
+              
 }  
 h1{  
     text-align: center;  
@@ -40,6 +42,12 @@ label{
     color: white;  
     font-size: 17px;  
 }  
+#accbutton{
+    background-color: white;
+    border-radius: 3px;
+    padding: 10px 10px; 
+    text-decoration: none;
+}
 #Uname{  
     width: 290px;  
     height: 30px;  
@@ -47,14 +55,30 @@ label{
     border-radius: 3px;  
     padding-left: 8px;  
 }  
+#submit{
+    background-color: white;
+    border-radius: 3px;
+    padding: 10px 10px; 
+    text-decoration: none;
+    font-family: 'Rubik', 'sans serif';
+}
 #Pass{  
+    width: 290px;  
+    height: 30px;  
+    border: none;  
+    border-radius: 3px;  
+    padding-left: 8px; 
+        
+}  
+#Email{  
     width: 290px;  
     height: 30px;  
     border: none;  
     border-radius: 3px;  
     padding-left: 8px;  
         
-}  
+} 
+
 #log{  
     width: 300px;  
     height: 30px;  
