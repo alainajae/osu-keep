@@ -1,9 +1,6 @@
 import flask
 import requests
 import comment
-import login as authentication
-import api as API
-from functools import wraps
 
 # import environment variables from .env
 import dotenv
@@ -19,73 +16,21 @@ API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 
 @app.route('/')
-
 @app.route('/index.html')
 def root():
-   login = get_login_info()
-   return flask.render_template('index.html', login= login)
+   return flask.render_template('index.html')
 
 @app.route('/aboutus.html')
 def about_page():
    return flask.render_template('aboutus.html')
 
-def login_required(f):
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		try:
-			if session['user_name'] is None:
-				return redirect( url_for( 'login' ) )
-		except Exception as e:
-			return redirect( url_for( 'login' ) )
-		return f(*args, **kwargs)
-	return decorated_function
+@app.route('/login.html')
+def login_page():
+   return flask.render_template('login.html')
 
-'''Gets username, user id and logged in'''
-def get_login_info():
-
-	try:
-		return {
-			'user_name': session['user_name'],
-			'user_id': session['user_id'],
-			'logged_in': True
-		}
-	except:
-		pass
-
-	return {
-		'user_name': "",
-		'user_id': "",
-		'logged_in': False
-	}
-
-
-@app.route( '/login/', methods = ['GET'] )
-def login():
-	auth = authentication.Auth()
-	return flask.redirect(auth.request_auth())
-
-@app.route( '/callback/' )
-def callback():
-    auth = authentication.Auth()
-    code = request.args.get('code')
-    user = auth.authorize(code)
-    api = API.Osuapi(user)
-    me = API.get_user()
-
-    session['user_name'] = str(me['username'])
-    session['user_id'] = str(me['id'])
-    return flask.redirect('/')
-    
-
-
-""" logout user """
-@app.route( '/logout/' )
-@login_required
-def logout():
-	session.pop( 'user_name', None )
-	session.pop( 'user_id', None )
-	return redirect( '/' )
-
+@app.route('/createaccount.html')
+def account_create_page():
+   return flask.render_template('createaccount.html')
 
 def get_token():
    data = {
@@ -138,7 +83,7 @@ def get_scores():
     """
     Requests user scores from osu API using given User ID in request header and returns best 100 scores by pp
     """
-    user_id = flask.request.headers.get('user_id')
+    user_id = flask.request.headers.get('user-id')
     params = {
         'include_fails': 1,
         'limit': 100
