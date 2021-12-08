@@ -42,7 +42,7 @@ def dosignin():
     username = flask.request.form.get('username')
     password = flask.request.form.get('password')
     passwordhash = get_password_hash(password)
-    user = lmsdatastore.load_user(username, passwordhash)
+    user = logindata.load_user(username, passwordhash)
     if user:
         flask.session['user'] = user.username
         return flask.redirect('/')
