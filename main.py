@@ -4,6 +4,7 @@ import comment
 import login as authentication
 import api as API
 from functools import wraps
+from authlib.integrations.flask_client import OAuth
 
 # import environment variables from .env
 import dotenv
@@ -14,78 +15,62 @@ if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
 
 app = flask.Flask(__name__)
+app.secret_key =  os.urandom(12).hex()
+
 
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
+AUTH_URL = 'https://osu.ppy.sh/oauth/authorize'
+TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
+
+oauth = OAuth(app)
+oauth.register(
+    name = 'osu',
+    client_id= os.getenv("OSU_CLIENT_ID"),
+    client_secret= os.getenv("OSU_CLIENT_SECRET"),
+    access_token_url = TOKEN_URL, 
+    access_token_params=None,
+    authorize_url= AUTH_URL,
+    authorize_params=None,
+    api_base_url=API_URL
+
+)
+
 
 @app.route('/')
 
 @app.route('/index.html')
 def root():
-   login = get_login_info()
-   return flask.render_template('index.html', login= login)
+   return flask.render_template('index.html')
 
 @app.route('/aboutus.html')
 def about_page():
    return flask.render_template('aboutus.html')
 
-def login_required(f):
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		try:
-			if session['user_name'] is None:
-				return redirect( url_for( 'login' ) )
-		except Exception as e:
-			return redirect( url_for( 'login' ) )
-		return f(*args, **kwargs)
-	return decorated_function
-
-'''Gets username, user id and logged in'''
-def get_login_info():
-
-	try:
-		return {
-			'user_name': session['user_name'],
-			'user_id': session['user_id'],
-			'logged_in': True
-		}
-	except:
-		pass
-
-	return {
-		'user_name': "",
-		'user_id': "",
-		'logged_in': False
-	}
-
-
-@app.route( '/login/', methods = ['GET'] )
+@app.route('/login/')
 def login():
-	auth = authentication.Auth()
-	return flask.redirect(auth.request_auth())
+    osu = oauth.create_client('osu')  
+    redirect_uri = flask.url_for('authorize', _external=True)
+    return osu.authorize_redirect(redirect_uri)
 
-@app.route( '/callback/' )
-def callback():
-    auth = authentication.Auth()
-    code = request.args.get('code')
-    user = auth.authorize(code)
-    api = API.Osuapi(user)
-    me = API.get_user()
+@app.route('/authorize')
+def authorize():
+    osu = oauth.create_client('osu')  # create the google oauth client
+    token = osu.authorize_access_token()  # Access token from google (needed to get user info)
+    resp = osu.get('userinfo')  # userinfo contains stuff u specificed in the scrope
+    user_info = resp.json()
+    user = oauth.osu.userinfo()  # uses openid endpoint to fetch user info
+    # Here you use the profile/user data that you got and query your database find/register the user
+    # and set ur own data in the session not the profile from google
+    session['profile'] = user_info
+    session.permanent = True  # make the session permanant so it keeps existing after broweser gets closed
+    return redirect('/')
 
-    session['user_name'] = str(me['username'])
-    session['user_id'] = str(me['id'])
-    return flask.redirect('/')
-    
-
-
-""" logout user """
-@app.route( '/logout/' )
-@login_required
+@app.route('/logout')
 def logout():
-	session.pop( 'user_name', None )
-	session.pop( 'user_id', None )
-	return redirect( '/' )
-
+    for key in list(session.keys()):
+        session.pop(key)
+    return redirect('/')
 
 def get_token():
    data = {
