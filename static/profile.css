@@ -1,27 +1,104 @@
-html {
-    background-color: var(--myGrey)
+body{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: left;
+}
+
+#username {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    background: #222;
+    border-radius: var(--border-width);
+}
+#colorbar {
+    position: relative;
+    content: "";
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
+    background-size: 300% 300%;
+    border-radius: var(--border-width);
+    animation: moveGradient 4s alternate infinite;
+}
+@keyframes moveGradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+#stats{
+    background-color: var(--myGrey);
+    padding: var(--spacing);
+    border-radius: var(--border-width);
 }
 
 #score-table, #user-title, .placeholder {
     color: white
 }
 
-#score-table {
-    margin: 1rem;
+#comment-section {
+    background-color: var(--myGrey);
+    border-radius: var(--border-width);
 }
 
-#commentForm {
-    background: var(--osuPink);
-    padding: 1%;
-    border-radius: 8px;
-    width: 25%;
+#comment-header, #posting {
+    padding: 0;
+    margin: 0;
+}
+
+#comment-form {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: left;
+    flex-direction: column;
+    text-align: left;    
+    background: #222;
+    padding: var(--spacing);
+    margin-top: var(--spacing);
+    color: white;
+    border-radius: var(--border-width);
+}
+
+#comment-text {
+    outline: none;
+    border: 2px solid white;
+    border-radius: var(--radius);
+    padding: var(--inputSpacing);
+    margin-top: var(--inputSpacing);
+    margin-bottom: var(--inputSpacing);
+    width: 90%;
+    transition: var(--transitionDuration);
+}
+
+#comment-text:focus {
+    border: 2px solid var(--myGrey);
+}
+
+#submit {
+    outline: none;
+    border: 2px solid white;
+    border-radius: var(--radius);
+    padding: var(--inputSpacing);
+}
+#submit:hover {
+    border: 2px solid grey;
+}
+#submit:active {
+    border: 2px solid black;
 }
 
 .comment {
-    margin: 1rem;
-    padding: 1rem;
-    background: hotpink;
-    width: 100%;
-    border-radius: 8px;
+    padding: var(--spacing);
+    background: #6bb2d7;
+    border-radius: var(--border-width);
     text-align: left;
 }

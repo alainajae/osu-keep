@@ -3,11 +3,12 @@
 <link rel="stylesheet" href="../static/styles.css">
 <link rel="stylesheet" href="../static/loading_screen.css">
 {% endblock %}
-{% block content %}
-
+{% block loading %}
 <div id="loading-screen">
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 </div>
+{% endblock %}
+{% block content %}
 
 <h1 class="title">osu!keep</h1>
 
@@ -16,7 +17,7 @@
         <input class="user_input" type="text" name="user" placeholder="Username or User ID" min="0">
         <input class="submit" type="submit" value="Go">
     </form>
-</div>
+
 {% endblock %}
 {% block script %}
 <script src="../static/script.js"></script>
