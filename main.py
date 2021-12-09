@@ -125,9 +125,14 @@ def get_profile():
     """
     user_key = flask.request.args['user']    
     user = get_user(user_key)
-    user_id = user['id']
-    username = user['username']
-    return flask.render_template('profile.html', user_id=user_id, username = username)
+    try:
+        user_id = user['id']
+        username = user['username']
+        return flask.render_template('profile.html', user_id=user_id, username = username)
+    except:
+        return flask.render_template('index.html')
+    
+    
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
