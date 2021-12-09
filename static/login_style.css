@@ -3,23 +3,31 @@
 :root {
     --osu-pink: #FF66AA;
 }
+#content{/*background for homepage*/
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
 
-body  
-{          
-    box-sizing: border-box; /*Not necessary in this situation*/
-    display: block; /*Not necessary, but we do want it this way*/
-    width: 100vw;  /*Not necessary, but we do want it this way*/
-    height: 100vh; /*Necessary.  100vh = 100% of the viewport height*/
-    padding: 0; /* No padding */
-    margin: 0; /* No margins */
-    background: url('osubackground.jpg') no-repeat center center;  
-    /* Shorthand: image, repeat, X align, Y align. */
-    background-size: cover; /* Cover all available space*/
-    overflow-y: hidden;
-    overflow-x: hidden;
-    font-family: 'Rubik', sans-serif;
-        
-}  
+body, html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
+body{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;    
+    height: 100vh;
+    background-image: url("osubackground.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center; 
+} 
 .login{  
     width: 360px;  
     overflow: hidden;  
@@ -30,12 +38,14 @@ body
     border-radius: 15px ;  
             
 }  
-h1{  
-    text-align: center;  
+h1.title{
+    position: fixed;
+    top: 0;
+    left:5;
+    font-size: 64px;
     color: white;
-    font-size: 64px;  
-    padding: 20px;  
-}  
+    font-weight: bold;
+}
 label{  
     color: white;  
     font-size: 17px;  
