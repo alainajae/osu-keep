@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang = "en">
     <head>
@@ -7,12 +8,10 @@
         {% endblock %}
     </head>
     <body>
-
-        <div class="topnav">
-            <!-- class="active" is the attribute that makes the nav pink, maybe use javascript to fix it -->
+        <div class="nav-navbar-nav">
             <a href="index.html">Home</a>
             <a href="aboutus.html">About Us</a>
-            <a href="login.html">Login</a>
+            <a href="login.html">Login</a> 
         </div>
 
         {% block loading %}
@@ -27,6 +26,9 @@
     </body>
 
     {% block script %}
+    <script src="../static/active.js"></script>
     {% endblock %}
+
+    
 
 </html>

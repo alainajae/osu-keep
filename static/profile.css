@@ -40,8 +40,40 @@ body{
     border-radius: var(--border-width);
 }
 
-#score-table, #user-title, .placeholder {
+.score-table, #user-title, .placeholder {
     color: white
+}
+
+.score-table{
+    border-radius: var(--border-width);
+    overflow: hidden;
+    border-collapse: collapse;
+    margin-left:auto; 
+    margin-right:auto;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.score-table thead tr {
+    background-color: var(--osuPink);
+    color: #ffffff;
+    text-align: left;
+}
+
+.score-table th, .score-table td{
+    padding: 12px 15px;
+}
+
+.score-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.score-table tbody tr:nth-of-type(even) {
+    background-color: #222;
+}
+
+.score-table tbody tr:last-of-type {
+    border-bottom: 2px solid var(--osuPink);
 }
 
 #comment-section {
@@ -98,7 +130,10 @@ body{
 
 .comment {
     padding: var(--spacing);
+    max-width: 155vh;
     background: #6bb2d7;
     border-radius: var(--border-width);
     text-align: left;
+    word-wrap: break-word;
+    
 }
