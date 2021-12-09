@@ -130,7 +130,7 @@ body{
 
 .comment {
     padding: var(--spacing);
-    max-width: 155vh;
+    max-width: 145vh;
     background: #6bb2d7;
     border-radius: var(--border-width);
     text-align: left;
