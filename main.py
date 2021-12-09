@@ -1,6 +1,9 @@
 import flask
 import requests
+from werkzeug.utils import redirect
 import comment
+# from requests_oauthlib import OAuth2Session
+from authlib.integrations.flask_client import OAuth
 
 # import environment variables from .env
 import dotenv
@@ -12,8 +15,50 @@ if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
 
 app = flask.Flask(__name__)
 
+# This allows us to use a plain HTTP callback
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
+
+app.secret_key = os.urandom(24)
+
+# OAuth data
 API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
+CLIENT_ID = os.getenv("OSU-CLIENT-ID")
+CLIENT_SECRET = os.getenv("OSU-CLIENT-SECRET")
+REDIRECT_URI = 'https://osu.ppy.sh/oauth/authorize'
+CALLBACK_URI = 'http://lvh.me:5000/authorize'
+HOME = 'http://lvh.me:5000'
+SCOPE = 'identify public'
+
+oauth = OAuth(app)
+oauth.register(
+    name = 'osu',
+    client_id= CLIENT_ID,
+    client_secret= CLIENT_SECRET,
+    access_token_url = TOKEN_URL, 
+    access_token_params=None,
+    authorize_url=REDIRECT_URI,
+    authorize_params=None,
+    api_base_url=API_URL
+)
+
+def get_token():
+   data = {
+      'client_id': CLIENT_ID,
+      'client_secret': CLIENT_SECRET,
+      'grant_type': 'client_credentials',
+      'scope': 'public'
+   }
+
+   response = requests.post(TOKEN_URL, data=data)
+
+   return response.json().get('access_token')
+
+HEADERS = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': f"Bearer {get_token()}"
+} 
 
 @app.route('/')
 @app.route('/index.html')
@@ -24,28 +69,18 @@ def root():
 def about_page():
    return flask.render_template('aboutus.html')
 
-@app.route('/login.html')
-def login_page():
-   return flask.render_template('login.html')
+@app.route('/login')
+def login():
+    redirect_uri = flask.url_for('authorize', _external=True)
+    return oauth.osu.authorize_redirect(redirect_uri)
 
-def get_token():
-   data = {
-      'client_id': os.getenv("OSU-CLIENT-ID"),
-      'client_secret': os.getenv("OSU-CLIENT-SECRET"),
-      'grant_type': 'client_credentials',
-      'scope': 'public'
-   }
-
-   response = requests.post(TOKEN_URL, data=data)
-
-   return response.json().get('access_token')
-
-TOKEN = get_token()
-HEADERS = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': f'Bearer {TOKEN}'
-} 
+@app.route("/authorize", methods=["GET"])
+def authorize():
+    osu = oauth.create_client('osu')
+    token = osu.authorize_access_token()['access_token']
+    flask.session['token'] = token
+    flask.session.permanent = True
+    return redirect('/')
 
 def get_user(user_key):
     """
