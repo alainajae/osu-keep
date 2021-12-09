@@ -20,8 +20,7 @@ TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 CLIENT_ID = os.getenv("OSU-CLIENT-ID")
 CLIENT_SECRET = os.getenv("OSU-CLIENT-SECRET")
 AUTH_URI = 'https://osu.ppy.sh/oauth/authorize'
-CALLBACK_URI = 'http://lvh.me:5000/authorize'
-HOME = 'http://lvh.me:5000'
+CALLBACK_URI = os.getenv("CALLBACK-URI")
 SCOPE = 'identify public'
 
 oauth = OAuth(app)
