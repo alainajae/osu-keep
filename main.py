@@ -12,6 +12,7 @@ import dotenv
 dotenv.load_dotenv()
 
 import os
+import os
 if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
 
@@ -61,6 +62,7 @@ def register_user():
     password2 = flask.request.form.get('password2')
     email = flask.request.form.get('email')
     errors = []
+
     if password1 != password2:
         errors.append('Passwords do not match.')
     email_parts = parseaddr(email)
@@ -103,7 +105,7 @@ def get_password_hash(pw):
     return hashlib.sha256(encoded).hexdigest()
 
 
-def get_user():
+def get_user_loggedin():
     """If our session has an identified user (i.e., a user is signed in), then
     return that username."""
 
@@ -114,16 +116,11 @@ def show_login_page():
     errors = ['You are not signed in.']
     return show_page('/signin.html', 'Sign In', errors)
 
-def show_page(page, title, courses=None, course=None, lesson=None,
-              completions=None, show=True, text=None, lines=None, errors=None):
+def show_page(page, title, show=True, text=None, lines=None, errors=None):
     return flask.render_template(page,
                                  page_title=title,
-                                 user=get_user(),
-                                 courses=courses,
-                                 course=course,
-                                 lesson=lesson,
+                                 user=get_user_loggedin(),
                                  show=show,
-                                 completions=completions,
                                  text=text,
                                  lines=lines,
                                  errors=errors)

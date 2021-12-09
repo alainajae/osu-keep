@@ -4,12 +4,15 @@ from google.cloud import datastore
 import objects
 import logging
 
-
+_USER_ENTITY = 'osu-keepuser'
 ### Your data storage code goes here.
 # Look at: https://console.cloud.google.com/datastore to see your live
 # entities.
 
-
+import os
+if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
+    
 def _get_client():
     """Build a datastore client."""
 
