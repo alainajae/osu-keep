@@ -1,8 +1,6 @@
 import flask
 import requests
-from werkzeug.utils import redirect
 import comment
-# from requests_oauthlib import OAuth2Session
 from authlib.integrations.flask_client import OAuth
 
 # import environment variables from .env
@@ -14,10 +12,6 @@ if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
 
 app = flask.Flask(__name__)
-
-# This allows us to use a plain HTTP callback
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
-
 app.secret_key = os.urandom(24)
 
 # OAuth data
@@ -25,7 +19,7 @@ API_URL = 'https://osu.ppy.sh/api/v2'
 TOKEN_URL = 'https://osu.ppy.sh/oauth/token'
 CLIENT_ID = os.getenv("OSU-CLIENT-ID")
 CLIENT_SECRET = os.getenv("OSU-CLIENT-SECRET")
-REDIRECT_URI = 'https://osu.ppy.sh/oauth/authorize'
+AUTH_URI = 'https://osu.ppy.sh/oauth/authorize'
 CALLBACK_URI = 'http://lvh.me:5000/authorize'
 HOME = 'http://lvh.me:5000'
 SCOPE = 'identify public'
@@ -37,7 +31,7 @@ oauth.register(
     client_secret= CLIENT_SECRET,
     access_token_url = TOKEN_URL, 
     access_token_params=None,
-    authorize_url=REDIRECT_URI,
+    authorize_url=AUTH_URI,
     authorize_params=None,
     api_base_url=API_URL
 )
@@ -80,7 +74,7 @@ def authorize():
     token = osu.authorize_access_token()['access_token']
     flask.session['token'] = token
     flask.session.permanent = True
-    return redirect('/')
+    return flask.redirect('/')
 
 def get_user(user_key):
     """
