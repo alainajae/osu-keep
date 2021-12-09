@@ -58,7 +58,7 @@ HEADERS = {
 @app.route('/index.html')
 def root():
     login = "Login"
-    if session.get('token'):
+    if 'token' in session:
         login = "Logout"
 
     return flask.render_template('index.html', login=login)
@@ -66,13 +66,13 @@ def root():
 @app.route('/aboutus.html')
 def about_page():
     login = "Login"
-    if session.get('token'):
+    if 'token' in session:
         login = "Logout"
     return flask.render_template('aboutus.html', login=login)
 
 @app.route('/login')
 def login():
-    if session.get('token'):
+    if 'token' in session:
         return flask.redirect('/logout')
 
     redirect_uri = flask.url_for('authorize', _external=True)
@@ -84,7 +84,6 @@ def authorize():
     token = osu.authorize_access_token()['access_token']
     session['token'] = token
     session['username'] = get_self(token)['username']
-    session.permanent = True
     return flask.redirect('/')
 
 @app.route('/logout')
@@ -137,11 +136,6 @@ def handle_create_comment():
 
     # Creates a comment by currently logged in user, of a message, on a user's profile
     comment.create_comment(session['username'], comment_message, user_id)
-
-    headers = {
-        'Content-Type': 'application/json',
-        'user-id': user_id
-    }
     return get_comments(user_id)
 
 @app.route('/get-scores', methods=['GET'])
@@ -168,7 +162,7 @@ def get_profile():
     user = get_user(user_key)
 
     login = "Login"
-    if session.get('token'):
+    if 'token' in session:
         login = "Logout"
 
     try:
