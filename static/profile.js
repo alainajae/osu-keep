@@ -7,13 +7,13 @@ window.addEventListener('load', function() {
 // Loads scores
 async function loadScores() {
     const scoreTable = document.getElementById('score-table-body');
-    const user_id = parseInt(document.getElementById('user-title').dataset.user)
+    const userID = parseInt(document.getElementById('user-title').dataset.user)
     // Get scores from Flask
     const scores = await fetch('/get-scores', {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
-            'user-id': user_id
+            'user-id': userID
         }
     })
     .then(function(response) {
@@ -72,10 +72,17 @@ function loadCommentForm() {
 // Loads comment section
 async function loadComments(comments={}) {
     const commentSection = document.getElementById('comments');
+    const userID = parseInt(document.getElementById('user-title').dataset.user)
     //First see if comments are passed in
     if (isEmpty(comments)) {
         //If not then fetch them from Flask
-        comments = await fetch('/get-comments')
+        comments = await fetch('/get-comments', {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'user-id': userID
+            }
+        })
         .then(function(response) {
             return response.json();
         })
@@ -107,7 +114,7 @@ async function loadComments(comments={}) {
         `
         <tr>
             <td class="comment">
-                    ${comments[i]['user']} @ ${comments[i]['time']}:
+                    ${comments[i]['commenter']} @ ${comments[i]['time']}:
                 <br>
                 >${comments[i]['text']}
             </td>
@@ -121,13 +128,16 @@ async function postComment() {
     commentText = document.getElementById('comment-text')
     posting = document.getElementById('posting') //Placeholder element that tells the user comment is posting
     posting.innerText = 'Posting...' //Show user that comment is posting
-
+    const userID = parseInt(document.getElementById('user-title').dataset.user)
 
     //POST Request to Flask to create comment and then returns a JSON of new comments
     const comments = await fetch("/create-comment", {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message: commentText.value})
+      body: JSON.stringify({
+          'message': commentText.value,
+          'userID': userID
+        })
     })
     .then(function(response) {
         return response.json();

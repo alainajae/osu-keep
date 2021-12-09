@@ -1,4 +1,5 @@
 import flask
+from flask import session
 import requests
 import comment
 from authlib.integrations.flask_client import OAuth
@@ -57,7 +58,7 @@ HEADERS = {
 @app.route('/index.html')
 def root():
     login = "Login"
-    if flask.session.get('token'):
+    if session.get('token'):
         login = "Logout"
 
     return flask.render_template('index.html', login=login)
@@ -65,13 +66,13 @@ def root():
 @app.route('/aboutus.html')
 def about_page():
     login = "Login"
-    if flask.session.get('token'):
+    if session.get('token'):
         login = "Logout"
     return flask.render_template('aboutus.html', login=login)
 
 @app.route('/login')
 def login():
-    if flask.session.get('token'):
+    if session.get('token'):
         return flask.redirect('/logout')
 
     redirect_uri = flask.url_for('authorize', _external=True)
@@ -81,27 +82,28 @@ def login():
 def authorize():
     osu = oauth.create_client('osu')
     token = osu.authorize_access_token()['access_token']
-    flask.session['token'] = token
-    flask.session.permanent = True
+    session['token'] = token
+    session['username'] = get_self(token)['username']
+    session.permanent = True
     return flask.redirect('/')
 
 @app.route('/logout')
 def logout():
-    for key in list(flask.session.keys()):
-        flask.session.pop(key)
+    for key in list(session.keys()):
+        session.pop(key)
     return flask.redirect('/')
 
-def get_self():
+def get_self(token):
     """
     Gets logged in user data
     """
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': f"Bearer {get_token()}"
+        'Authorization': f"Bearer {token}"
     }
 
-    response = requests.get(f'{API_URL}/me/', headers=HEADERS)
+    response = requests.get(f'{API_URL}/me/', headers=headers)
     return response.json()
 
 def get_user(user_key):
@@ -116,20 +118,31 @@ def get_user(user_key):
     return response.json()
 
 @app.route('/get-comments', methods=['GET'])
-def get_comments():
+def get_comments(user_id=None):
     """
     Gets comments list and returns it as JSON
     """
-    return flask.jsonify(comment.get_comments_list())
+    if not user_id:
+        user_id = flask.request.headers.get('user-id')
+    return flask.jsonify(comment.get_comments_list(user_id))
 
 @app.route('/create-comment', methods=['POST'])
 def handle_create_comment():
     """
     Creates a comment from the given POST request and returns a comment list
     """
-    comment_message = flask.request.get_json(silent=True)['message']
-    comment.create_comment('user', comment_message) # TODO: replace 'user' with current logged in user
-    return get_comments()
+    body = flask.request.get_json(silent=True)
+    comment_message = body['message']
+    user_id = body['userID']
+
+    # Creates a comment by currently logged in user, of a message, on a user's profile
+    comment.create_comment(session['username'], comment_message, user_id)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'user-id': user_id
+    }
+    return get_comments(user_id)
 
 @app.route('/get-scores', methods=['GET'])
 def get_scores():
@@ -155,7 +168,7 @@ def get_profile():
     user = get_user(user_key)
 
     login = "Login"
-    if flask.session.get('token'):
+    if session.get('token'):
         login = "Logout"
 
     try:
