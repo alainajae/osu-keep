@@ -31,6 +31,7 @@ async function loadScores(element, endpoint) {
         const diffName = scores[i]['beatmap']['version']
         const beatmapTitle = `${beatmapSet['artist']} - ${beatmapSet['title']} [${diffName}] // ${beatmapSet['creator']}` //Format: ARTIST - TITLE [DIFFNAME] // MAPPER
         const acc = (Math.round(10000 * scores[i]['accuracy']) / 100).toFixed(2); 
+        const pp = (scores[i]['pp'] == null) ? '-' : scores[i]['pp']
 
         scoreTable.innerHTML += 
         `
@@ -40,7 +41,7 @@ async function loadScores(element, endpoint) {
             <td>${beatmapTitle}</td>
             <td>${acc}%</td>
             <td>${scores[i]['max_combo']}x</td>
-            <td>${scores[i]['pp']}</td>
+            <td>${pp}</td>
         </tr>
         `
     }
