@@ -11,15 +11,15 @@
 
 
 <div id="stats">
-    <table id="score-table">
+    <table class='table-sortable' id="score-table">
         <thead>
             <tr>
-                <td>#</td>
-                <td>Rank</td>
-                <td>Beatmap</td>
-                <td>Acc</td>
-                <td>Combo</td>
-                <td>PP</td>
+                <th>#</th>
+                <th>Rank</th>
+                <th>Beatmap</th>
+                <th>Acc</th>
+                <th>Combo</th>
+                <th>PP</th>
             </tr>
         </thead>
         <tbody id="score-table-body">
@@ -28,6 +28,7 @@
             </tr>
         </tbody>
     </table>
+        
 </div>
 
 <div id="comment-section">
@@ -51,5 +52,8 @@
 
 {% endblock %}
 {% block script %}
+
 <script src="../static/profile.js"></script>
+<script src="../static/tablesort.js"></script>
+
 {% endblock %}
