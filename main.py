@@ -56,14 +56,24 @@ HEADERS = {
 @app.route('/')
 @app.route('/index.html')
 def root():
-   return flask.render_template('index.html')
+    login = "Login"
+    if flask.session.get('token'):
+        login = "Logout"
+
+    return flask.render_template('index.html', login=login)
 
 @app.route('/aboutus.html')
 def about_page():
-   return flask.render_template('aboutus.html')
+    login = "Login"
+    if flask.session.get('token'):
+        login = "Logout"
+    return flask.render_template('aboutus.html', login=login)
 
 @app.route('/login')
 def login():
+    if flask.session.get('token'):
+        return flask.redirect('/logout')
+
     redirect_uri = flask.url_for('authorize', _external=True)
     return oauth.osu.authorize_redirect(redirect_uri)
 
@@ -74,6 +84,25 @@ def authorize():
     flask.session['token'] = token
     flask.session.permanent = True
     return flask.redirect('/')
+
+@app.route('/logout')
+def logout():
+    for key in list(flask.session.keys()):
+        flask.session.pop(key)
+    return flask.redirect('/')
+
+def get_self():
+    """
+    Gets logged in user data
+    """
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': f"Bearer {get_token()}"
+    }
+
+    response = requests.get(f'{API_URL}/me/', headers=HEADERS)
+    return response.json()
 
 def get_user(user_key):
     """
@@ -124,12 +153,17 @@ def get_profile():
     """
     user_key = flask.request.args['user']    
     user = get_user(user_key)
+
+    login = "Login"
+    if flask.session.get('token'):
+        login = "Logout"
+
     try:
         user_id = user['id']
         username = user['username']
-        return flask.render_template('profile.html', user_id=user_id, username = username)
+        return flask.render_template('profile.html', user_id=user_id, username=username, login=login)
     except:
-        return flask.render_template('index.html')
+        return flask.render_template('index.html', login=login)
     
     
 
