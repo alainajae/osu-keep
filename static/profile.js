@@ -1,5 +1,6 @@
 window.addEventListener('load', function() {
     loadScores()
+    loadCommentForm()
     loadComments()
 });
 
@@ -40,6 +41,29 @@ async function loadScores() {
             <td>${scores[i]['max_combo']}x</td>
             <td>${scores[i]['pp']}</td>
         </tr>
+        `
+    }
+}
+
+function loadCommentForm() {
+    const loggedIn = document.getElementById('login').innerText == "Logout"
+    const commentForm = document.getElementById('comment-form')
+
+    if (loggedIn) {
+        commentForm.innerHTML = 
+        `
+        <h3 id="comment-header">Comments</h3>
+        <form onsubmit="postComment();return false;">
+            <input id="comment-text" type="text" name="text" placeholder="add a public comment...">
+            <input id="submit" type="submit" value="Post">
+        </form>
+        <h4 id="posting"></h4>
+        `
+    }
+    else {
+        commentForm.innerHTML = 
+        `
+        <h3 id="comment-header">Log in to add comments</h3>
         `
     }
 }
