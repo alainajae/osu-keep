@@ -40,7 +40,7 @@ body{
     border-radius: var(--border-width);
 }
 
-.score-table, #user-title, .placeholder {
+.score-table, #user-title, .placeholder, .table-name {
     color: white
 }
 

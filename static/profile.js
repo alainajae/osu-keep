@@ -1,15 +1,16 @@
 window.addEventListener('load', function() {
-    loadScores()
+    loadScores('score-table-body', '/get-scores')
+    loadScores('recent-table-body', '/get-recent')
     loadCommentForm()
     loadComments()
 });
 
 // Loads scores
-async function loadScores() {
-    const scoreTable = document.getElementById('score-table-body');
+async function loadScores(element, endpoint) {
+    const scoreTable = document.getElementById(element);
     const userID = parseInt(document.getElementById('user-title').dataset.user)
     // Get scores from Flask
-    const scores = await fetch('/get-scores', {
+    const scores = await fetch(endpoint, {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',

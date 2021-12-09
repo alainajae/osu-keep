@@ -145,11 +145,25 @@ def get_scores():
     """
     user_id = flask.request.headers.get('user-id')
     params = {
-        'include_fails': 1,
         'limit': 100
     }
 
     response = requests.get(f'{API_URL}/users/{user_id}/scores/best', params=params, headers=HEADERS)
+    user_scores = response.json() # this is not actually a json its just a python list
+    return flask.jsonify(user_scores)
+
+@app.route('/get-recent', methods=['GET'])
+def get_recent():
+    """
+    Requests user scores from osu API using given User ID in request header and returns best 100 scores by pp
+    """
+    user_id = flask.request.headers.get('user-id')
+    params = {
+        'include_fails': 1,
+        'limit': 100
+    }
+
+    response = requests.get(f'{API_URL}/users/{user_id}/scores/recent', params=params, headers=HEADERS)
     user_scores = response.json() # this is not actually a json its just a python list
     return flask.jsonify(user_scores)
     
