@@ -52,23 +52,19 @@ HEADERS = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': f"Bearer {get_token()}"
-} 
+}
+
+def logged_in():
+    return 'token' in session
 
 @app.route('/')
 @app.route('/index.html')
 def root():
-    login = "Login"
-    if 'token' in session:
-        login = "Logout"
-
-    return flask.render_template('index.html', login=login)
+    return flask.render_template('index.html', login=logged_in())
 
 @app.route('/aboutus.html')
 def about_page():
-    login = "Login"
-    if 'token' in session:
-        login = "Logout"
-    return flask.render_template('aboutus.html', login=login)
+    return flask.render_template('aboutus.html', login=logged_in())
 
 @app.route('/login')
 def login():
@@ -175,16 +171,12 @@ def get_profile():
     user_key = flask.request.args['user']    
     user = get_user(user_key)
 
-    login = "Login"
-    if 'token' in session:
-        login = "Logout"
-
     try:
         user_id = user['id']
         username = user['username']
-        return flask.render_template('profile.html', user_id=user_id, username=username, login=login)
+        return flask.render_template('profile.html', user_id=user_id, username=username, login=logged_in())
     except:
-        return flask.render_template('index.html', login=login)
+        return flask.render_template('index.html', login=logged_in())
     
     
 

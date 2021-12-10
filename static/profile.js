@@ -23,6 +23,8 @@ async function loadScores(element, endpoint) {
     .then(function(data) {
         return data;
     });
+
+    console.log(scores)
     
     scoreTable.innerHTML = ''
 

@@ -12,7 +12,11 @@
         <div class="nav-navbar-nav">
             <a href="index.html">Home</a>
             <a href="aboutus.html">About Us</a>
-            <a id="login" href="/login">{{login}}</a>
+            {% if login %}
+            <a id="login" href="/logout">Logout</a>
+            {% else %}
+            <a id="login" href="/login">Login</a>
+            {% endif %}
         </div>
 
         {% block loading %}
