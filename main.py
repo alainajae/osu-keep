@@ -13,7 +13,7 @@ if (os.path.exists("./osu-keep-b226a1b1acf3.json")):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "./osu-keep-b226a1b1acf3.json"
 
 app = flask.Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv("APP-SECRET-KEY")
 
 # OAuth data
 API_URL = 'https://osu.ppy.sh/api/v2'
